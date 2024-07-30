@@ -47,19 +47,19 @@ export const Navbar = async () => {
                             </>
                         ) : (
                             <>
-                                <a href='/api/auth/register' className={buttonVariants({
+                                <Link href='/api/auth/register' className={buttonVariants({
                                     size: 'sm',
                                     variant: 'ghost'
                                 })}>
                                     Sign up
-                                </a>
+                                </Link>
 
-                                <a href='/api/auth/login' className={buttonVariants({
+                                <Link href='/api/auth/login' className={buttonVariants({
                                     size: 'sm',
                                     variant: 'ghost'
                                 })}>
                                     Login
-                                </a>
+                                </Link>
 
                                 <div className='h-8 w-px bg-zinc-200 hidden sm:block' />
                                 <Link href='/configure/upload' className={buttonVariants({

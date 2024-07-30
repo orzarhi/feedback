@@ -70,11 +70,22 @@ const config = {
           "0%, 100%": { opacity: "0.2" },
           '20%': { opacity: "1" },
         },
+        spin: {
+          from: { transform: "rotate(0deg)" },
+          to: { transform: "rotate(360deg)" },
+        },
+        "left-to-right": {
+          "0%": { transform: "translateX(-30%)" },
+          "50%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(10%)" },
+        },
       },
       animation: {
         "marquee": 'marquee var(--marquee-duration) linear infinite',
         "fade-in": "fade-in 0.5s linear forwards",
         "flashing": "flashing 1.4s infinite linear",
+        "spin-slow": "spin 3s linear infinite",
+        "left-to-right": "left-to-right 1.5s linear infinite",
       },
     },
   },

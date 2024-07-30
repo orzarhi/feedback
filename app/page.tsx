@@ -58,12 +58,12 @@ export default function Home() {
             </div>
           </div>
             <Link
-              href="/api/auth/register"
+              href="/api/auth/login"
               className={buttonVariants({
-                className:"max-sm:w-full bg-primary-foreground relative bottom-4 text-primary hover:bg-primary-foreground/90",
+                className:"max-sm:w-full bg-primary-foreground relative bottom-2 text-primary hover:bg-primary-foreground/90",
               })}
             >
-              Take the Survey <ArrowRight className="size-5 ml-2" />
+              Take the Survey <ArrowRight className="size-5 mt-0.5 ml-2 animate-left-to-right" />
             </Link>
         </div>
       </section>

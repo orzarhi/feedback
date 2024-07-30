@@ -62,13 +62,13 @@ export const Navbar = async () => {
                                 </Link>
 
                                 <div className='h-8 w-px bg-zinc-200 hidden sm:block' />
-                                <Link href='/configure/upload' className={buttonVariants({
+                                {/* <Link href='/configure/upload' className={buttonVariants({
                                     size: 'sm',
                                     className: 'hidden sm:flex items-center gap-1'
                                 })}>
                                     Create survey
                                     <ArrowRight className='size-5 ml-1.5' />
-                                </Link>
+                                </Link> */}
                             </>
                         )}
                     </div>

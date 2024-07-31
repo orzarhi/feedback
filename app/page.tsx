@@ -57,14 +57,14 @@ export default function Home() {
               </p>
             </div>
           </div>
-            <Link
+            {/* <Link
               href="/api/auth/login"
               className={buttonVariants({
                 className:"max-sm:w-full bg-primary-foreground relative bottom-2 text-primary hover:bg-primary-foreground/90",
               })}
             >
               Take the Survey <ArrowRight className="size-5 mt-0.5 ml-2 animate-left-to-right" />
-            </Link>
+            </Link> */}
         </div>
       </section>
     </div>

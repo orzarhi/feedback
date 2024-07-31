@@ -46,7 +46,7 @@ export const Navbar = async () => {
                     </Link>
 
                     <Link
-                      href="/configure/upload"
+                      href="/create-survey"
                       className={buttonVariants({
                         size: "sm",
                         className: "hidden sm:flex items-center gap-1",

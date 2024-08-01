@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { createSurvey } from './actions';
 import { QuestionForm } from './QuestionForm';
+import { toast } from 'sonner';
 
 export const CreateSurvey = () => {
   const router = useRouter();
@@ -16,6 +17,7 @@ export const CreateSurvey = () => {
     register,
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -44,10 +46,14 @@ export const CreateSurvey = () => {
 
   const { mutate: create, isPending } = useMutation({
     mutationFn: createSurvey,
-    onSuccess: () => {},
+    onSuccess: () => {
+      toast.success('Survey created successfully');
+      // router.push('/surveys');
+      reset();
+    },
     onError: (error) => {
       console.error('Error creating survey:', error);
-      alert('Failed to create survey. Please try again.');
+      toast.error(error.message);
     },
   });
 

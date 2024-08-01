@@ -15,21 +15,24 @@ import { Button } from '@/components/ui/button';
 type survey = keyof typeof SurveyType;
 
 const LABEL_MAP: Record<survey, string> = {
+  CHECKBOX: 'Checkbox',
   MULTIPLE_CHOICE: 'Multiple Choice',
   SHORT_ANSWER: 'Short Answer',
-  CHECKBOX: 'Checkbox',
 };
 
 interface TypeDropDownProps {
-  surveyType: survey;
-  setSurveyType: Dispatch<SetStateAction<survey>>;
+    surveyType: survey;
+    setSurveyType: Dispatch<SetStateAction<survey>>;
 }
 
 export const TypeDropDown = ({ surveyType, setSurveyType }: TypeDropDownProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="w-full sm:w-52 flex justify-between items-center">
+        <Button
+          variant="outline"
+          className="w-full sm:w-52 flex justify-between items-center"
+        >
           {LABEL_MAP[surveyType]}
           <ChevronsUpDown className="size-4 ml-2 shrink-0 opacity-50" />
         </Button>

@@ -29,6 +29,7 @@ export const CreateSurvey = () => {
   } = useForm({
     defaultValues: {
       title: '',
+      description: '' as string | undefined,
       questions: [
         {
           id: 0,
@@ -70,7 +71,7 @@ export const CreateSurvey = () => {
 
   return (
     <form
-      className="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8"
+      className="max-w-4xl mx-auto px-2 py-8 sm:px-6 lg:px-8"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="space-y-6">
@@ -93,7 +94,9 @@ export const CreateSurvey = () => {
             {questions.map((question, questionIndex) => (
               <QuestionForm
                 key={question.id}
+                //@ts-expect-error
                 control={control}
+                //@ts-expect-error
                 register={register}
                 questionIndex={questionIndex}
                 removeQuestion={removeQuestion}
@@ -118,7 +121,7 @@ export const CreateSurvey = () => {
             </Button>
           </div>
         </div>
-        
+
         <div className="mt-6">
           <Label>Survey Type</Label>
           <TypeDropDown surveyType={surveyType} setSurveyType={setSurveyType} />

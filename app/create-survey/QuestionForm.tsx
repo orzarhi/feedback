@@ -58,7 +58,7 @@ export const QuestionForm = ({
           className="mt-auto"
           onClick={() => removeQuestion(questionIndex)}
         >
-          <X className="size-5 error_message" />
+          <X className="size-5 text-red-500" />
         </Button>
       </div>
       <div className="mt-4 space-y-4">
@@ -88,7 +88,7 @@ export const QuestionForm = ({
               className="mt-auto"
               onClick={() => removeAnswer(answerIndex)}
             >
-              <Trash2 className="size-5 error_message" />
+              <Trash2 className="size-5 text-red-500" />
             </Button>
           </div>
         ))}

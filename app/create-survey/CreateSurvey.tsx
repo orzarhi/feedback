@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Survey } from '@/lib/validation';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -43,19 +44,15 @@ export const CreateSurvey = () => {
 
   const { mutate: create, isPending } = useMutation({
     mutationFn: createSurvey,
-    onSuccess: () => {
-      alert('Survey created successfully!');
-      router.push('/surveys');
-    },
+    onSuccess: () => {},
     onError: (error) => {
       console.error('Error creating survey:', error);
       alert('Failed to create survey. Please try again.');
     },
   });
 
-  const onSubmit = (data: any) => {
-    console.log('data', data);
-    // create(data);
+  const onSubmit = (data: Survey) => {
+    create(data);
   };
 
   return (

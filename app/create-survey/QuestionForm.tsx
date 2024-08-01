@@ -3,13 +3,13 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { FormValues } from '@/types';
+import { Survey } from '@/lib/validation';
 import { Trash2 } from 'lucide-react';
 import { Control, FieldValues, useFieldArray, UseFormRegister } from 'react-hook-form';
 
 interface QuestionFormProps {
-  control: Control<FormValues>;
-  register: UseFormRegister<FormValues>;
+  control: Control<Survey>;
+  register: UseFormRegister<Survey>;
   questionIndex: number;
   removeQuestion: (index: number) => void;
   errors: FieldValues;

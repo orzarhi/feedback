@@ -1,40 +1,52 @@
-"use server";
+'use server';
 
-import { db } from "@/db";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { Answer, Question } from "@prisma/client";
-import { revalidatePath } from "next/cache";
+import { db } from '@/db';
+import { Survey } from '@/lib/validation';
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
+import { revalidatePath } from 'next/cache';
 
-export const createSurvey = async (data: any) => {
+export const createSurvey = async (data: Survey) => {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
   if (!user?.id || !user?.email) {
-    throw new Error("Invalid user data");
+    throw new Error('Invalid user data');
   }
 
-  //   const questions = data.questions.map((question: Question) => ({
-  //     title: question.title,
-  //   }));
+  const existingSurvey = await db.survey.findFirst({
+    where: {
+      userId: user.id,
+      title: data.title,
+    },
+  });
 
-  //   await db.survey.create({
-  //     data: {
-  //       title: data.title,
-  //       userId: user.id,
-  //       questions: {
-  //         create: questions,
-  //       },
-  //     },
-  //   });
+  if (existingSurvey) {
+    throw new Error('Survey with this title already exists');
+  }
 
-  //   const answers = data.questions.answers.map((answer: Answer) => ({
-  //     answer: answer.answer,
-  //     questionId: answer.questionId,
-  //   }));
-
-  //   await db.answer.create({ data: answers });
-
-  //   revalidatePath("/dashboard");
+  await db.$transaction(async (prisma) => {
+    const createdSurvey = await prisma.survey.create({
+      data: {
+        title: data.title,
+        userId: user.id,
+      },
+    });
+    await Promise.all(
+      data.questions.map((question) =>
+        prisma.question.create({
+          data: {
+            text: question.text,
+            surveyId: createdSurvey.id,
+            Answer: {
+              create: question.answers.map((answer) => ({
+                text: answer.text,
+              })),
+            },
+          },
+        })
+      )
+    );
+  });
 
   return { success: true };
 };

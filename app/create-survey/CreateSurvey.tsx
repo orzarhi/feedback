@@ -3,16 +3,23 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { Survey } from '@/lib/validation';
+import { SurveyType } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { createSurvey } from './actions';
 import { QuestionForm } from './QuestionForm';
-import { toast } from 'sonner';
+import { TypeDropDown } from './TypeDropDown';
 
 export const CreateSurvey = () => {
+  const [surveyType, setSurveyType] = useState<keyof typeof SurveyType>('CHECKBOX');
+
   const router = useRouter();
+
   const {
     register,
     control,
@@ -109,6 +116,23 @@ export const CreateSurvey = () => {
             >
               Add Question
             </Button>
+          </div>
+        </div>
+        
+        <div className="mt-6">
+          <Label>Survey Type</Label>
+          <TypeDropDown surveyType={surveyType} setSurveyType={setSurveyType} />
+        </div>
+
+        <div className="mt-6">
+          <Label htmlFor="description">Survey Description (optional)</Label>
+          <div className="mt-1">
+            <Textarea
+              id="description"
+              {...register('description')}
+              rows={3}
+              placeholder="Enter a description for your survey"
+            />
           </div>
         </div>
         <div className="flex justify-end">

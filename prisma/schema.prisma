@@ -29,9 +29,10 @@ model User {
 }
 
 model Survey {
-  id    String     @id @default(cuid())
-  title String
-  type  SurveyType
+  id          String     @id @default(cuid())
+  title       String
+  description String?
+  type        SurveyType
 
   questions Question[]
   user      User       @relation(fields: [userId], references: [id])

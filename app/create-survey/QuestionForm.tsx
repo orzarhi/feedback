@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Survey } from '@/lib/validation';
-import { Trash2 } from 'lucide-react';
+import { Trash2, X } from 'lucide-react';
 import { Control, FieldValues, useFieldArray, UseFormRegister } from 'react-hook-form';
 
 interface QuestionFormProps {
@@ -58,7 +58,7 @@ export const QuestionForm = ({
           className="mt-auto"
           onClick={() => removeQuestion(questionIndex)}
         >
-          <Trash2 className="size-5 error_message" />
+          <X className="size-5 error_message" />
         </Button>
       </div>
       <div className="mt-4 space-y-4">

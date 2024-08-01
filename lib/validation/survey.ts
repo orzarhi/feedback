@@ -2,6 +2,8 @@ import { number, z } from 'zod';
 
 export const surveySchema = z.object({
   title: z.string(),
+  description: z.string().optional(),
+  type: z.enum(['MULTIPLE_CHOICE', 'SHORT_ANSWER', 'CHECKBOX']),
   questions: z.array(
     z.object({
       id: z.number(),

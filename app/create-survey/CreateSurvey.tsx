@@ -3,110 +3,115 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Trash2 } from 'lucide-react';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { createSurvey } from './actions';
-import { useState } from 'react';
+import { QuestionForm } from './QuestionForm';
 
 export const CreateSurvey = () => {
-  const [questions, setQuestions] = useState([{ id: 1, answers: [{ id: 1 }, { id: 2 }] }]);
+  const router = useRouter();
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      title: '',
+      questions: [
+        {
+          id: 0,
+          text: '',
+          answers: [
+            { id: 0, text: '' },
+            { id: 1, text: '' },
+          ],
+        },
+      ],
+    },
+  });
 
-  const addQuestion = () => {
-    const newQuestionId = questions.length + 1;
-    setQuestions([...questions, { id: newQuestionId, answers: [{ id: 1 }, { id: 2 }] }]);
-  };
+  const {
+    fields: questions,
+    append: appendQuestion,
+    remove: removeQuestion,
+  } = useFieldArray({
+    control,
+    name: 'questions',
+  });
 
-  const addAnswer = (questionId:number) => {
-    setQuestions(questions.map(question => 
-      question.id === questionId 
-        ? { ...question, answers: [...question.answers, { id: question.answers.length + 1 }] }
-        : question
-    ));
-  };
+  const { mutate: create, isPending } = useMutation({
+    mutationFn: createSurvey,
+    onSuccess: () => {
+      alert('Survey created successfully!');
+      router.push('/surveys');
+    },
+    onError: (error) => {
+      console.error('Error creating survey:', error);
+      alert('Failed to create survey. Please try again.');
+    },
+  });
 
-  const removeQuestion = (questionId:number) => {
-    setQuestions(questions.filter(question => question.id !== questionId)
-      .map((question, index) => ({ ...question, id: index + 1 })));
-  };
-
-  const removeAnswer = (questionId:number, answerId:number) => {
-    setQuestions(questions.map(question => 
-      question.id === questionId 
-        ? { 
-            ...question, 
-            answers: question.answers
-              .filter(answer => answer.id !== answerId)
-              .map((answer, index) => ({ ...answer, id: index + 1 }))
-          }
-        : question
-    ));
+  const onSubmit = (data: any) => {
+    console.log('data', data);
+    // create(data);
   };
 
   return (
     <form
       className="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8"
-      action={createSurvey}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <div className="space-y-6">
         <div>
           <Label htmlFor="title">Survey Title</Label>
           <div className="mt-1">
             <Input
-              type="text"
               id="title"
-              name="title"
+              {...register('title', { required: 'Title is required' })}
               placeholder="Enter a title for your survey"
             />
+            {errors.title && (
+              <span className="error_message">{errors.title.message}</span>
+            )}
           </div>
         </div>
         <div>
           <Label>Questions</Label>
           <div className="mt-1 space-y-4">
-            {questions.map((question) => (
-              <div key={question.id} className="bg-white shadow-sm rounded-md p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <Label htmlFor={`question-${question.id}`}>Question {question.id}</Label>
-                    <div className="mt-1">
-                      <Input
-                        type="text"
-                        id={`question-${question.id}`}
-                        name={`question-${question.id}`}
-                        placeholder="Enter your question"
-                      />
-                    </div>
-                  </div>
-                  <Button variant="link" className="mt-auto" onClick={() => removeQuestion(question.id)}>
-                    <Trash2 className="size-5 text-red-500" />
-                  </Button>
-                </div>
-                <div className="mt-4 space-y-4">
-                  {question.answers.map((answer) => (
-                    <div key={answer.id} className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <Label htmlFor={`answer-${question.id}-${answer.id}`}>Answer {answer.id}</Label>
-                        <div className="mt-1">
-                          <Input
-                            type="text"
-                            id={`answer-${question.id}-${answer.id}`}
-                            name={`answer-${question.id}-${answer.id}`}
-                            placeholder="Enter an answer"
-                          />
-                        </div>
-                      </div>
-                      <Button variant="link" className="mt-auto" onClick={() => removeAnswer(question.id, answer.id)}>
-                        <Trash2 className="size-5 text-red-500" />
-                      </Button>
-                    </div>
-                  ))}
-                  <Button variant="ghost" onClick={() => addAnswer(question.id)}>Add Answer</Button>
-                </div>
-              </div>
+            {questions.map((question, questionIndex) => (
+              <QuestionForm
+                key={question.id}
+                control={control}
+                register={register}
+                questionIndex={questionIndex}
+                removeQuestion={removeQuestion}
+                errors={errors}
+              />
             ))}
-            <Button variant="ghost" onClick={addQuestion}>Add Question</Button>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() =>
+                appendQuestion({
+                  id: questions.length,
+                  text: '',
+                  answers: [
+                    { id: 0, text: '' },
+                    { id: 1, text: '' },
+                  ],
+                })
+              }
+            >
+              Add Question
+            </Button>
           </div>
         </div>
         <div className="flex justify-end">
-          <Button type="submit">Submit Survey</Button>
+          <Button type="submit" disabled={isPending}>
+            {isPending ? 'Submitting...' : 'Submit Survey'}
+          </Button>
         </div>
       </div>
     </form>

@@ -1,13 +1,8 @@
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
-  ArrowLeft,
-  ArrowRight,
   ClipboardIcon,
   GiftIcon,
-  UsersIcon,
-} from "lucide-react";
-import Link from "next/link";
+  UsersIcon
+} from 'lucide-react';
 
 export default function Home() {
   return (
@@ -57,7 +52,7 @@ export default function Home() {
               </p>
             </div>
           </div>
-            {/* <Link
+          {/* <Link
               href="/api/auth/login"
               className={buttonVariants({
                 className:"max-sm:w-full bg-primary-foreground relative bottom-2 text-primary hover:bg-primary-foreground/90",

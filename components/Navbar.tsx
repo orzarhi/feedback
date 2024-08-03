@@ -14,7 +14,7 @@ export const Navbar = async () => {
   const isAdmin = user?.email === process.env.ADMIN_EMAIL;
 
   return (
-    <nav className="sticky z-[100] h-14 inset-x-0 top-0 w-full border-b border-gray-200 bg-white/90 dark:bg-black dark:border-b-0 backdrop-blur-lg transition-all">
+    <nav className="sticky z-[100] h-14 inset-x-0 top-0 w-full border-b border-gray-200 bg-white/90 dark:bg-black dark:border-b-zinc-600 backdrop-blur-lg transition-all">
       <MaxWidthWrapper>
         <div className="flex h-14 items-center justify-between border-b border-zinc-200 dark:border-zinc-600">
           <Link href="/" className="flex z-40 font-semibold">

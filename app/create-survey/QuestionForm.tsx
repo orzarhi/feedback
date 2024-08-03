@@ -32,7 +32,7 @@ export const QuestionForm = ({
   });
 
   return (
-    <div className="bg-white shadow-sm rounded-md p-4">
+    <div className="shadow-sm rounded-md p-4">
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <Label htmlFor={`question-${questionIndex}`}>

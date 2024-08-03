@@ -66,7 +66,11 @@ export const CreateSurvey = () => {
   });
 
   const onSubmit = (data: Survey) => {
-    create(data);
+    const payload = {
+      ...data,
+      type: surveyType,
+    };
+    create(payload);
   };
 
   return (
@@ -88,9 +92,9 @@ export const CreateSurvey = () => {
             )}
           </div>
         </div>
-        <div>
+        <div className="">
           <Label>Questions</Label>
-          <div className="mt-1 space-y-4">
+          <div className="mt-1 space-y-4 ">
             {questions.map((question, questionIndex) => (
               <QuestionForm
                 key={question.id}

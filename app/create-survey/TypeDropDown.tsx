@@ -44,7 +44,7 @@ export const TypeDropDown = ({ surveyType, setSurveyType }: TypeDropDownProps) =
             className={cn(
               'flex text-sm gap-1 items-center p-2.5 cursor-default hover:bg-zinc-100',
               {
-                'bg-zinc-100': surveyType === type,
+                'bg-zinc-200 dark:bg-zinc-700': surveyType === type,
               }
             )}
             onClick={() => setSurveyType(type as survey)}

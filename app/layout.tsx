@@ -20,26 +20,28 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Navbar />
-        <Providers>{children}</Providers>
-        <Toaster
-          position="top-right"
-          icons={{
-            success: '🎉',
-            error: '❌',
-            warning: '⚠️',
-            info: 'ℹ️',
-          }}
-          toastOptions={{
-            duration: 4000,
-            classNames: {
-              success: 'bg-green-500 border-green-500',
-              error: 'bg-rose-500 border-rose-500',
-              warning: 'bg-yellow-500 border-yellow-500',
-              info: 'bg-blue-500 border-blue-500',
-            },
-          }}
-        />
+        <Providers>
+          <Navbar />
+          {children}
+          <Toaster
+            position="top-right"
+            icons={{
+              success: '🎉',
+              error: '❌',
+              warning: '⚠️',
+              info: 'ℹ️',
+            }}
+            toastOptions={{
+              duration: 4000,
+              classNames: {
+                success: 'bg-green-500 border-green-500',
+                error: 'bg-rose-500 border-rose-500',
+                warning: 'bg-yellow-500 border-yellow-500',
+                info: 'bg-blue-500 border-blue-500',
+              },
+            }}
+          />
+        </Providers>
       </body>
     </html>
   );

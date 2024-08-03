@@ -25,7 +25,7 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Survey    Survey[]
+  survey    Survey[]
 }
 
 model Survey {
@@ -47,7 +47,7 @@ model Question {
   text     String
   survey   Survey   @relation(fields: [surveyId], references: [id])
   surveyId String
-  Answer   Answer[]
+  answers   Answer[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

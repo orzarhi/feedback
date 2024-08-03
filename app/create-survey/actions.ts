@@ -25,7 +25,7 @@ export const createSurvey = async (data: Survey & { type: keyof typeof SurveyTyp
     throw new Error('Survey with this title already exists');
   }
 
-  await db.$transaction(async (prisma) => {
+  const createSurvey = await db.$transaction(async (prisma) => {
     const createdSurvey = await prisma.survey.create({
       data: {
         title: data.title,
@@ -34,13 +34,14 @@ export const createSurvey = async (data: Survey & { type: keyof typeof SurveyTyp
         userId: user.id,
       },
     });
+
     await Promise.all(
       data.questions.map((question) =>
         prisma.question.create({
           data: {
             text: question.text,
             surveyId: createdSurvey.id,
-            Answer: {
+            answers: {
               create: question.answers.map((answer) => ({
                 text: answer.text,
               })),
@@ -49,7 +50,13 @@ export const createSurvey = async (data: Survey & { type: keyof typeof SurveyTyp
         })
       )
     );
+
+    return createdSurvey;
   });
 
-  return { success: true };
+  if (!createSurvey) {
+    throw new Error('Failed to create survey');
+  }
+
+  return { success: true, surveyId: createSurvey.id };
 };

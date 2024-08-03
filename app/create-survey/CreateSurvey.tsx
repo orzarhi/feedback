@@ -13,7 +13,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { createSurvey } from './actions';
 import { QuestionForm } from './QuestionForm';
-import { TypeDropDown } from './TypeDropDown';
+import { TypeSelector } from './TypeSelector';
 
 export const CreateSurvey = () => {
   const [surveyType, setSurveyType] = useState<keyof typeof SurveyType>('CHECKBOX');
@@ -54,9 +54,9 @@ export const CreateSurvey = () => {
 
   const { mutate: create, isPending } = useMutation({
     mutationFn: createSurvey,
-    onSuccess: () => {
+    onSuccess: ({ surveyId }) => {
       toast.success('Survey created successfully');
-      // router.push('/surveys');
+      router.push(`/survey/${surveyId}`);
       reset();
     },
     onError: (error) => {
@@ -128,7 +128,7 @@ export const CreateSurvey = () => {
 
         <div className="mt-6 space-y-1">
           <Label>Survey Type</Label>
-          <TypeDropDown surveyType={surveyType} setSurveyType={setSurveyType} />
+          <TypeSelector surveyType={surveyType} setSurveyType={setSurveyType} />
         </div>
 
         <div className="mt-6">

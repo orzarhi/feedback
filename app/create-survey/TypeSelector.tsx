@@ -13,7 +13,7 @@ import { Dispatch, SetStateAction } from 'react';
 type survey = keyof typeof SurveyType;
 
 const LABEL_MAP: Record<survey, string> = {
-  CHECKBOX: 'Checkbox',
+  RADIO: 'Radio',
   MULTIPLE_CHOICE: 'Multiple Choice',
   SHORT_ANSWER: 'Short Answer',
 };

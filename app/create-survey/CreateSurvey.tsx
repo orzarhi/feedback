@@ -16,7 +16,7 @@ import { QuestionForm } from './QuestionForm';
 import { TypeSelector } from './TypeSelector';
 
 export const CreateSurvey = () => {
-  const [surveyType, setSurveyType] = useState<keyof typeof SurveyType>('CHECKBOX');
+  const [surveyType, setSurveyType] = useState<keyof typeof SurveyType>('RADIO');
 
   const router = useRouter();
 

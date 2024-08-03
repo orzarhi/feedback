@@ -14,7 +14,7 @@ datasource db {
 }
 
 enum SurveyType {
-  CHECKBOX
+  RADIO
   SHORT_ANSWER
   MULTIPLE_CHOICE
 }
@@ -47,7 +47,7 @@ model Question {
   text     String
   survey   Survey   @relation(fields: [surveyId], references: [id])
   surveyId String
-  answers   Answer[]
+  answers  Answer[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

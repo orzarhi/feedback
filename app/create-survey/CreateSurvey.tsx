@@ -126,7 +126,7 @@ export const CreateSurvey = () => {
           </div>
         </div>
 
-        <div className="mt-6">
+        <div className="mt-6 space-y-1">
           <Label>Survey Type</Label>
           <TypeDropDown surveyType={surveyType} setSurveyType={setSurveyType} />
         </div>

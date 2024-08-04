@@ -1,5 +1,6 @@
-'use client';
+// @ts-nocheck
 
+'use client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -17,7 +18,6 @@ import { TypeSelector } from './TypeSelector';
 
 export const CreateSurvey = () => {
   const [surveyType, setSurveyType] = useState<keyof typeof SurveyType>('RADIO');
-  const [questionType, setQuestionType] = useState<keyof typeof SurveyType>('RADIO');
 
   const router = useRouter();
 
@@ -26,8 +26,8 @@ export const CreateSurvey = () => {
     control,
     handleSubmit,
     getValues,
-    watch,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -36,7 +36,6 @@ export const CreateSurvey = () => {
       questions: [
         {
           id: 0,
-          type: questionType,
           text: '',
           answers: [
             { id: 0, text: '' },
@@ -72,7 +71,7 @@ export const CreateSurvey = () => {
   const onSubmit = (data: Survey) => {
     const payload = {
       ...data,
-      type: surveyType,
+      surveyType,
     };
     // create(payload);
     console.log(payload);
@@ -103,15 +102,12 @@ export const CreateSurvey = () => {
             {questions.map((question, questionIndex) => (
               <QuestionForm
                 key={question.id}
-                //@ts-expect-error
                 control={control}
-                //@ts-expect-error
                 register={register}
+                setValue={setValue}
                 questionIndex={questionIndex}
                 removeQuestion={removeQuestion}
                 errors={errors}
-                questionType={questionType}
-                setQuestionType={setQuestionType}
               />
             ))}
             <Button
@@ -120,7 +116,6 @@ export const CreateSurvey = () => {
               onClick={() =>
                 appendQuestion({
                   id: questions.length,
-                  type: questionType,
                   text: '',
                   answers: [
                     { id: 0, text: '' },

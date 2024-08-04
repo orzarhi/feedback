@@ -13,8 +13,14 @@ import { cn } from '@/lib/utils';
 import { Survey } from '@/lib/validation';
 import { SurveyType } from '@prisma/client';
 import { Check, Ellipsis, Trash2, X } from 'lucide-react';
-import { Dispatch, SetStateAction, useState } from 'react';
-import { Control, FieldValues, useFieldArray, UseFormRegister } from 'react-hook-form';
+import {
+  Control,
+  FieldValues,
+  useFieldArray,
+  UseFormRegister,
+  UseFormSetValue,
+  useWatch
+} from 'react-hook-form';
 
 type survey = keyof typeof SurveyType;
 
@@ -27,24 +33,20 @@ const LABEL_MAP: Record<survey, string> = {
 interface QuestionFormProps {
   control: Control<Survey>;
   register: UseFormRegister<Survey>;
+  setValue: UseFormSetValue<Survey>;
   questionIndex: number;
   removeQuestion: (index: number) => void;
   errors: FieldValues;
-  questionType: survey;
-  setQuestionType: Dispatch<SetStateAction<survey>>;
 }
 
 export const QuestionForm = ({
   control,
   register,
+  setValue,
   questionIndex,
   removeQuestion,
   errors,
-  questionType,
-  setQuestionType,
 }: QuestionFormProps) => {
-  const [isTypeOpen, setIsTypeOpen] = useState<boolean>(false);
-
   const {
     fields: answers,
     append: appendAnswer,
@@ -52,6 +54,12 @@ export const QuestionForm = ({
   } = useFieldArray({
     control,
     name: `questions.${questionIndex}.answers`,
+  });
+
+  const watchedQuestionType = useWatch({
+    control,
+    name: `questions.${questionIndex}.questionType`,
+    defaultValue: 'RADIO',
   });
 
   return (
@@ -62,7 +70,7 @@ export const QuestionForm = ({
             <Label htmlFor={`question-${questionIndex}`}>
               Question {questionIndex + 1}{' '}
               <span className="text-zinc-400 dark:text-zinc-600">
-                (Type: {LABEL_MAP[questionType]})
+                (Type: {LABEL_MAP[watchedQuestionType as survey]})
               </span>
             </Label>
             <DropdownMenu>
@@ -88,17 +96,17 @@ export const QuestionForm = ({
                     className={cn(
                       'flex text-sm gap-1 items-center p-2.5 cursor-default hover:bg-zinc-100',
                       {
-                        'bg-zinc-200 dark:bg-zinc-700': questionType === type,
+                        'bg-zinc-200 dark:bg-zinc-700': watchedQuestionType === type,
                       }
                     )}
-                    onClick={() => {
-                      setQuestionType(type as survey);
-                    }}
+                    onClick={() =>
+                      setValue(`questions.${questionIndex}.questionType`, type as survey)
+                    }
                   >
                     <Check
                       className={cn(
                         'mr-2 size-4 text-primary',
-                        questionType === type ? 'opacity-100' : 'opacity-0'
+                        watchedQuestionType === type ? 'opacity-100' : 'opacity-0'
                       )}
                     />
                     {LABEL_MAP[type as survey]}

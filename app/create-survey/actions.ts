@@ -6,7 +6,7 @@ import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import { SurveyType } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 
-export const createSurvey = async (data: Survey & { type: keyof typeof SurveyType }) => {
+export const createSurvey = async (data: Survey & { surveyType: keyof typeof SurveyType }) => {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
@@ -30,7 +30,7 @@ export const createSurvey = async (data: Survey & { type: keyof typeof SurveyTyp
       data: {
         title: data.title,
         description: data?.description,
-        surveyType: data.type,
+        surveyType: data.surveyType,
         userId: user.id,
       },
     });
@@ -40,7 +40,7 @@ export const createSurvey = async (data: Survey & { type: keyof typeof SurveyTyp
         prisma.question.create({
           data: {
             text: question.text,
-            questionType: question.type,
+            questionType: question.questionType,
             surveyId: createdSurvey.id,
             answers: {
               create: question.answers.map((answer) => ({

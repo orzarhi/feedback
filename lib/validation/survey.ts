@@ -7,7 +7,7 @@ export const surveySchema = z.object({
   questions: z.array(
     z.object({
       id: z.number(),
-      type: z.enum([
+      questionType: z.enum([
         SurveyType.RADIO,
         SurveyType.SHORT_ANSWER,
         SurveyType.MULTIPLE_CHOICE,

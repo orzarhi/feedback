@@ -24,8 +24,7 @@ export const Navbar = async () => {
           <div className="h-full flex items-center space-x-4">
             {user ? (
               <>
-                <ModeToggle />
-                <Link
+                <a
                   href="/api/auth/logout"
                   className={buttonVariants({
                     size: 'sm',
@@ -33,7 +32,7 @@ export const Navbar = async () => {
                   })}
                 >
                   Sign out
-                </Link>
+                </a>
 
                 {isAdmin ? (
                   <>
@@ -58,12 +57,14 @@ export const Navbar = async () => {
                       Create survey
                       <ArrowRight className="size-5 ml-1.5" />
                     </Link>
+                    <div className="h-8 w-px bg-zinc-200 hidden sm:block" />
+                    <ModeToggle />
                   </>
                 ) : null}
               </>
             ) : (
               <>
-                <Link
+                <a
                   href="/api/auth/register"
                   className={buttonVariants({
                     size: 'sm',
@@ -71,9 +72,9 @@ export const Navbar = async () => {
                   })}
                 >
                   Sign up
-                </Link>
+                </a>
 
-                <Link
+                <a
                   href="/api/auth/login"
                   className={buttonVariants({
                     size: 'sm',
@@ -81,9 +82,10 @@ export const Navbar = async () => {
                   })}
                 >
                   Login
-                </Link>
+                </a>
 
                 <div className="h-8 w-px bg-zinc-200 hidden sm:block" />
+                <ModeToggle />
                 {/* <Link href='/configure/upload' className={buttonVariants({
                                     size: 'sm',
                                     className: 'hidden sm:flex items-center gap-1'

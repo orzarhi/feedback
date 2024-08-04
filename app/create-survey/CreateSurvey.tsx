@@ -17,6 +17,7 @@ import { TypeSelector } from './TypeSelector';
 
 export const CreateSurvey = () => {
   const [surveyType, setSurveyType] = useState<keyof typeof SurveyType>('RADIO');
+  const [questionType, setQuestionType] = useState<keyof typeof SurveyType>('RADIO');
 
   const router = useRouter();
 
@@ -24,6 +25,8 @@ export const CreateSurvey = () => {
     register,
     control,
     handleSubmit,
+    getValues,
+    watch,
     reset,
     formState: { errors },
   } = useForm({
@@ -33,6 +36,7 @@ export const CreateSurvey = () => {
       questions: [
         {
           id: 0,
+          type: questionType,
           text: '',
           answers: [
             { id: 0, text: '' },
@@ -70,7 +74,8 @@ export const CreateSurvey = () => {
       ...data,
       type: surveyType,
     };
-    create(payload);
+    // create(payload);
+    console.log(payload);
   };
 
   return (
@@ -94,7 +99,7 @@ export const CreateSurvey = () => {
         </div>
         <div className="">
           <Label>Questions</Label>
-          <div className="mt-1 space-y-4 ">
+          <div className="mt-1 space-y-4">
             {questions.map((question, questionIndex) => (
               <QuestionForm
                 key={question.id}
@@ -105,6 +110,8 @@ export const CreateSurvey = () => {
                 questionIndex={questionIndex}
                 removeQuestion={removeQuestion}
                 errors={errors}
+                questionType={questionType}
+                setQuestionType={setQuestionType}
               />
             ))}
             <Button
@@ -113,6 +120,7 @@ export const CreateSurvey = () => {
               onClick={() =>
                 appendQuestion({
                   id: questions.length,
+                  type: questionType,
                   text: '',
                   answers: [
                     { id: 0, text: '' },

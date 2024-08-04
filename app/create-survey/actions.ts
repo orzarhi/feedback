@@ -30,7 +30,7 @@ export const createSurvey = async (data: Survey & { type: keyof typeof SurveyTyp
       data: {
         title: data.title,
         description: data?.description,
-        type: data.type,
+        surveyType: data.type,
         userId: user.id,
       },
     });
@@ -40,6 +40,7 @@ export const createSurvey = async (data: Survey & { type: keyof typeof SurveyTyp
         prisma.question.create({
           data: {
             text: question.text,
+            questionType: question.type,
             surveyId: createdSurvey.id,
             answers: {
               create: question.answers.map((answer) => ({

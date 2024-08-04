@@ -1,11 +1,28 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
 import { Survey } from '@/lib/validation';
-import { Trash2, X } from 'lucide-react';
+import { SurveyType } from '@prisma/client';
+import { Check, Ellipsis, Trash2, X } from 'lucide-react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { Control, FieldValues, useFieldArray, UseFormRegister } from 'react-hook-form';
+
+type survey = keyof typeof SurveyType;
+
+const LABEL_MAP: Record<survey, string> = {
+  RADIO: 'Radio',
+  MULTIPLE_CHOICE: 'Multiple Choice',
+  SHORT_ANSWER: 'Short Answer',
+};
 
 interface QuestionFormProps {
   control: Control<Survey>;
@@ -13,6 +30,8 @@ interface QuestionFormProps {
   questionIndex: number;
   removeQuestion: (index: number) => void;
   errors: FieldValues;
+  questionType: survey;
+  setQuestionType: Dispatch<SetStateAction<survey>>;
 }
 
 export const QuestionForm = ({
@@ -21,7 +40,11 @@ export const QuestionForm = ({
   questionIndex,
   removeQuestion,
   errors,
+  questionType,
+  setQuestionType,
 }: QuestionFormProps) => {
+  const [isTypeOpen, setIsTypeOpen] = useState<boolean>(false);
+
   const {
     fields: answers,
     append: appendAnswer,
@@ -35,9 +58,55 @@ export const QuestionForm = ({
     <div className="shadow-sm rounded-md p-4">
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <Label htmlFor={`question-${questionIndex}`}>
-            Question {questionIndex + 1}
-          </Label>
+          <div className="flex justify-between items-center">
+            <Label htmlFor={`question-${questionIndex}`}>
+              Question {questionIndex + 1}{' '}
+              <span className="text-zinc-400 dark:text-zinc-600">
+                (Type: {LABEL_MAP[questionType]})
+              </span>
+            </Label>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+                >
+                  <Ellipsis className="size-4" />
+                  <span className="sr-only">Open menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="p-0">
+                <DropdownMenuItem
+                  disabled
+                  className="flex items-center p-2.5 cursor-default"
+                >
+                  <Label className="text-sm">Question type</Label>
+                </DropdownMenuItem>
+                {Object.keys(SurveyType).map((type) => (
+                  <DropdownMenuItem
+                    key={type}
+                    className={cn(
+                      'flex text-sm gap-1 items-center p-2.5 cursor-default hover:bg-zinc-100',
+                      {
+                        'bg-zinc-200 dark:bg-zinc-700': questionType === type,
+                      }
+                    )}
+                    onClick={() => {
+                      setQuestionType(type as survey);
+                    }}
+                  >
+                    <Check
+                      className={cn(
+                        'mr-2 size-4 text-primary',
+                        questionType === type ? 'opacity-100' : 'opacity-0'
+                      )}
+                    />
+                    {LABEL_MAP[type as survey]}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
           <div className="mt-1">
             <Input
               {...register(`questions.${questionIndex}.text`, {
@@ -56,9 +125,10 @@ export const QuestionForm = ({
           type="button"
           variant="link"
           className="mt-auto"
+          size="icon"
           onClick={() => removeQuestion(questionIndex)}
         >
-          <X className="size-5 text-red-500" />
+          <X className="size-5 text-red-500/80 hover:text-red-500" />
         </Button>
       </div>
       <div className="mt-4 space-y-4">
@@ -86,9 +156,10 @@ export const QuestionForm = ({
               type="button"
               variant="link"
               className="mt-auto"
+              size="icon"
               onClick={() => removeAnswer(answerIndex)}
             >
-              <Trash2 className="size-5 text-red-500" />
+              <Trash2 className="size-5 text-red-500/80 hover:text-red-500" />
             </Button>
           </div>
         ))}

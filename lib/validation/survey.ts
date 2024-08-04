@@ -1,3 +1,4 @@
+import { SurveyType } from '@prisma/client';
 import { number, z } from 'zod';
 
 export const surveySchema = z.object({
@@ -6,6 +7,11 @@ export const surveySchema = z.object({
   questions: z.array(
     z.object({
       id: z.number(),
+      type: z.enum([
+        SurveyType.RADIO,
+        SurveyType.SHORT_ANSWER,
+        SurveyType.MULTIPLE_CHOICE,
+      ]),
       text: z.string(),
       answers: z.array(z.object({ id: number(), text: z.string() })),
     })

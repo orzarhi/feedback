@@ -63,13 +63,13 @@ export const QuestionForm = ({
   });
 
   return (
-    <div className="shadow-sm rounded-md p-4">
+    <div className="shadow-sm rounded-md p-1">
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <div className="flex justify-between items-center">
             <Label htmlFor={`question-${questionIndex}`}>
               Question {questionIndex + 1}{' '}
-              <span className="text-zinc-400 dark:text-zinc-600">
+              <span className="text-muted-foreground">
                 (Type: {LABEL_MAP[watchedQuestionType as survey]})
               </span>
             </Label>
@@ -83,7 +83,7 @@ export const QuestionForm = ({
                   <span className="sr-only">Open menu</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="p-0">
+              <DropdownMenuContent className="p-0 mx-1">
                 <DropdownMenuItem
                   disabled
                   className="flex items-center p-2.5 cursor-default"

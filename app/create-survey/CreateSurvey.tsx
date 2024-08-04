@@ -18,7 +18,7 @@ import { QuestionForm } from './QuestionForm';
 import { TypeSelector } from './TypeSelector';
 
 export const CreateSurvey = () => {
-  const [surveyType, setSurveyType] = useState<keyof typeof SurveyType >('RADIO');
+  const [surveyType, setSurveyType] = useState<keyof typeof SurveyType >('');
 
   const router = useRouter();
 
@@ -74,8 +74,8 @@ export const CreateSurvey = () => {
       ...data,
       surveyType,
     };
-    // create(payload);
-    console.log(payload);
+    // console.log(payload)
+    create(payload);
   };
 
   return (
@@ -133,7 +133,8 @@ export const CreateSurvey = () => {
         <div className="mt-6 space-y-1">
           <Label>Survey Type</Label>
           <TypeSelector surveyType={surveyType} setSurveyType={setSurveyType} />
-          <p className='text-xs text-zinc-400 dark:text-zinc-600'>You can change the type for all the questions together here.</p>
+          <p className='text-xs text-muted-foreground'>You can change the type for all the questions together here.</p>
+          <p className='text-xs font-semibold text-muted-foreground'> If you chose different types, don&apos;t refer to me.</p>
         </div>
 
         <div className="mt-6">

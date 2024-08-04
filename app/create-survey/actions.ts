@@ -7,6 +7,7 @@ import { SurveyType } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 
 export const createSurvey = async (data: Survey & { surveyType: keyof typeof SurveyType }) => {
+  console.log("🚀 ~ createSurvey ~ data:", data)
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
@@ -30,7 +31,7 @@ export const createSurvey = async (data: Survey & { surveyType: keyof typeof Sur
       data: {
         title: data.title,
         description: data?.description,
-        surveyType: data.surveyType,
+        surveyType: data.surveyType || 'RADIO',
         userId: user.id,
       },
     });
@@ -40,7 +41,7 @@ export const createSurvey = async (data: Survey & { surveyType: keyof typeof Sur
         prisma.question.create({
           data: {
             text: question.text,
-            questionType: question.questionType,
+            questionType: question?.questionType || 'RADIO',
             surveyId: createdSurvey.id,
             answers: {
               create: question.answers.map((answer) => ({

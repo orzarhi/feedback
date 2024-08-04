@@ -45,7 +45,7 @@ model Survey {
 model Question {
   id           String     @id @default(cuid())
   text         String
-  questionType SurveyType
+  questionType SurveyType?
 
   survey   Survey   @relation(fields: [surveyId], references: [id])
   surveyId String

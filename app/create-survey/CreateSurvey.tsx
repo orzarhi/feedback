@@ -143,8 +143,13 @@ export const CreateSurvey = () => {
           </div>
         </div>
         <div className="flex justify-end">
-          <Button type="submit" disabled={isPending}>
-            {isPending ? 'Submitting...' : 'Submit Survey'}
+          <Button
+            type="submit"
+            disabled={isPending}
+            isLoading={isPending}
+            loadingText="Submitting"
+          >
+            Submit Survey
           </Button>
         </div>
       </div>

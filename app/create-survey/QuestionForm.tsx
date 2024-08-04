@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { Survey } from '@/lib/validation';
-import { SurveyType } from '@prisma/client';
+import { SelectionType } from '@prisma/client';
 import { Check, Ellipsis, Trash2, X } from 'lucide-react';
 import {
   Control,
@@ -22,10 +22,10 @@ import {
   useWatch,
 } from 'react-hook-form';
 
-type survey = keyof typeof SurveyType;
+type survey = keyof typeof SelectionType;
 
 const LABEL_MAP: Record<survey, string> = {
-  RADIO: 'Radio',
+  SINGLE_CHOICE: 'Single Choice',
   MULTIPLE_CHOICE: 'Multiple Choice',
   SHORT_ANSWER: 'Short Answer',
 };
@@ -59,7 +59,7 @@ export const QuestionForm = ({
   const watchedQuestionType = useWatch({
     control,
     name: `questions.${questionIndex}.questionType`,
-    defaultValue: 'RADIO',
+    defaultValue: 'SINGLE_CHOICE',
   });
 
   return (
@@ -90,7 +90,7 @@ export const QuestionForm = ({
                 >
                   <Label>Question type</Label>
                 </DropdownMenuItem>
-                {Object.keys(SurveyType).map((type) => (
+                {Object.keys(SelectionType).map((type) => (
                   <DropdownMenuItem
                     key={type}
                     className={cn(

@@ -7,13 +7,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { SurveyType } from '@prisma/client';
+import { SelectionType } from '@prisma/client';
 import { Dispatch, SetStateAction } from 'react';
 
-type survey = keyof typeof SurveyType;
+type survey = keyof typeof SelectionType;
 
 const LABEL_MAP: Record<survey, string> = {
-  RADIO: 'Radio',
+  SINGLE_CHOICE: 'Single Choice',
   MULTIPLE_CHOICE: 'Multiple Choice',
   SHORT_ANSWER: 'Short Answer',
 };
@@ -31,7 +31,7 @@ export const TypeSelector = ({ surveyType, setSurveyType }: TypeSelectorProps) =
         <SelectValue placeholder="Select survey type" />
       </SelectTrigger>
       <SelectContent className="p-0">
-        {Object.keys(SurveyType).map((type) => (
+        {Object.keys(SelectionType).map((type) => (
           <SelectItem key={type} value={type}>
             {LABEL_MAP[type as survey]}
           </SelectItem>

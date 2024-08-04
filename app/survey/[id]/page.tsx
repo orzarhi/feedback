@@ -80,7 +80,7 @@ export default async function Page({ params }: PageProps) {
           {survey[0].questions.map((question, index) => (
             <div key={index} className="space-y-2">
               {index + 1}. <Label htmlFor={`question-${index}`}>{question.text}</Label>
-              {question.questionType === 'RADIO' ? (
+              {question.questionType === 'SINGLE_CHOICE' ? (
                 <RadioGroup key={index} name={`question-${index}`}>
                   {question.answers.map((answer, answerIndex) => (
                     <div key={answerIndex} className="flex items-center space-x-2">

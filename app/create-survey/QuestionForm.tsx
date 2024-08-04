@@ -19,7 +19,7 @@ import {
   useFieldArray,
   UseFormRegister,
   UseFormSetValue,
-  useWatch
+  useWatch,
 } from 'react-hook-form';
 
 type survey = keyof typeof SurveyType;
@@ -88,7 +88,7 @@ export const QuestionForm = ({
                   disabled
                   className="flex items-center p-2.5 cursor-default"
                 >
-                  <Label className="text-sm">Question type</Label>
+                  <Label>Question type</Label>
                 </DropdownMenuItem>
                 {Object.keys(SurveyType).map((type) => (
                   <DropdownMenuItem

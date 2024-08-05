@@ -34,7 +34,7 @@ export const createSurvey = async (
       data: {
         title: data.title,
         description: data?.description,
-        surveyType: data?.surveyType || 'SINGLE_CHOICE',
+        surveyType: data?.surveyType || 'DEFINES_ALONE',
         userId: user.id,
       },
     });

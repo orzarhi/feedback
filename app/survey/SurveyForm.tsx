@@ -18,11 +18,11 @@ import { useCallback } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { SATISFACTION } from '@/config';
 
-type satisfaction = keyof typeof SATISFACTION;
+type Satisfaction = keyof typeof SATISFACTION;
 
 type FormData = {
   feedback: string;
-  satisfaction: satisfaction;
+  satisfaction: Satisfaction;
   [key: `question-${number}`]: string;
   [key: `question-${number}-answer-${number}`]: boolean;
 };
@@ -73,7 +73,7 @@ interface SurveyFormProps {
   };
 }
 
-const LABEL_MAP: Record<satisfaction, string> = {
+const LABEL_MAP: Record<Satisfaction, string> = {
   VERY_SATISFIED: 'Very Satisfied',
   SATISFIED: 'Satisfied',
   NEUTRAL: 'Neutral',
@@ -81,12 +81,12 @@ const LABEL_MAP: Record<satisfaction, string> = {
   VERY_DISSATISFIED: 'Very Dissatisfied',
 };
 
-
 export const SurveyForm = ({ survey }: SurveyFormProps) => {
   const {
     control,
     handleSubmit,
     register,
+
     formState: { errors },
   } = useForm();
 
@@ -110,7 +110,7 @@ export const SurveyForm = ({ survey }: SurveyFormProps) => {
                 <Controller
                   name={`question-${question.id}`}
                   control={control}
-                  rules={{ required: 'Answer is required' }}
+                  // rules={{ required: 'Answer is required' }}
                   render={({ field }) => (
                     <RadioGroup onValueChange={field.onChange} value={field.value}>
                       {question.answers.map((answer) => (
@@ -134,38 +134,38 @@ export const SurveyForm = ({ survey }: SurveyFormProps) => {
                 )}
               </>
             )}
-            {question.questionType === 'MULTIPLE_CHOICE' &&
-              question.answers.map((answer) => (
-                <div key={answer.id} className="flex items-center space-x-2">
-                  <Controller
-                    name={`question-${question.id}-answer-${answer.id}`}
-                    control={control}
-                    rules={{ required: 'Answer is required' }}
-                    render={({ field }) => (
-                      <Checkbox
-                        id={`question-${question.id}-answer-${answer.id}`}
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    )}
-                  />
-                  <Label htmlFor={`question-${question.id}-answer-${answer.id}`}>
-                    {answer.text}
-                  </Label>
-                </div>
-              ))}
-            {errors[`question-${question.id}`] && (
-              <p className="error_message">
-                {errors[`question-${question.id}`]?.message?.toString()}
-              </p>
-            )}
+            <div className="space-y-2">
+              {question.questionType === 'MULTIPLE_CHOICE' &&
+                question.answers.map((answer) => (
+                  <div key={answer.id} className="flex items-center space-x-2">
+                    <Controller
+                      name={`question-${question.id}-answer-${answer.id}`}
+                      control={control}
+                      //rules={{ required: 'Answer is required' }}
+                      render={({ field }) => (
+                        <Checkbox
+                          id={`question-${question.id}-answer-${answer.id}`}
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      )}
+                    />
+                    <Label htmlFor={`question-${question.id}-answer-${answer.id}`}>
+                      {answer.text}
+                    </Label>
+                  </div>
+                ))}
+              {errors[`question-${question.id}`] && (
+                <p className="error_message">
+                  {errors[`question-${question.id}`]?.message?.toString()}
+                </p>
+              )}
+            </div>
             {question.questionType === 'SHORT_ANSWER' && (
               <>
                 <Input
                   id={`question-${question.id}`}
-                  {...register(`question-${question.id}`, {
-                    required: 'Answer is required',
-                  })}
+                  {...register(`question-${question.id}`)}
                   placeholder="Enter your answer"
                 />
                 {errors[`question-${question.id}`] && (
@@ -194,7 +194,7 @@ export const SurveyForm = ({ survey }: SurveyFormProps) => {
               <SelectContent>
                 {Object.keys(SATISFACTION).map((key) => (
                   <SelectItem key={key} value={key}>
-                    {LABEL_MAP[key as satisfaction]}
+                    {LABEL_MAP[key as Satisfaction]}
                   </SelectItem>
                 ))}
               </SelectContent>

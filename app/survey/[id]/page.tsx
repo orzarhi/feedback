@@ -27,7 +27,7 @@ export default async function Page({ params }: PageProps) {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
-  if (!user) {
+  if (!user?.id || !user?.email) {
     return notFound();
   }
 
@@ -37,7 +37,7 @@ export default async function Page({ params }: PageProps) {
     return notFound();
   }
 
-  const survey = await db.survey.findMany({
+  const survey = await db.survey.findUnique({
     where: {
       id,
     },
@@ -48,10 +48,12 @@ export default async function Page({ params }: PageProps) {
       createdAt: true,
       questions: {
         select: {
+          id: true,
           text: true,
           questionType: true,
           answers: {
             select: {
+              id: true,
               text: true,
             },
           },
@@ -60,7 +62,7 @@ export default async function Page({ params }: PageProps) {
     },
   });
 
-  if (!survey || !survey.length) {
+  if (!survey || !survey.questions) {
     return notFound();
   }
 
@@ -68,22 +70,22 @@ export default async function Page({ params }: PageProps) {
     <div className="container mx-auto max-w-3xl px-4 py-12 md:px-6 md:py-16 lg:px-8 lg:py-20">
       <div className="space-y-2 text-center">
         <h1 className="text-3xl font-bold tracking-tight sm:text-4x">
-          {survey[0].title}
+          {survey.title}
         </h1>
-        <p className="text-muted-foreground md:text-xl">{survey[0].description}</p>
+        <p className="text-muted-foreground md:text-xl">{survey.description}</p>
         <p className="text-muted-foreground text-md">
-          {format(survey[0].createdAt, 'MMMM dd, yyyy')}
+          {format(survey.createdAt, 'MMMM dd, yyyy')}
         </p>
       </div>
       <form className="mt-8 space-y-8">
         <div className="space-y-4">
-          {survey[0].questions.map((question, index) => (
-            <div key={index} className="space-y-2">
+          {survey.questions.map((question, index) => (
+            <div key={question.id} className="space-y-2">
               {index + 1}. <Label htmlFor={`question-${index}`}>{question.text}</Label>
               {question.questionType === 'SINGLE_CHOICE' ? (
                 <RadioGroup key={index} name={`question-${index}`}>
                   {question.answers.map((answer, answerIndex) => (
-                    <div key={answerIndex} className="flex items-center space-x-2">
+                    <div key={answer.id} className="flex items-center space-x-2">
                       <RadioGroupItem
                         value={answer.text}
                         id={`question-${index}-answer-${answerIndex}`}

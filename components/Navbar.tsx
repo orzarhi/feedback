@@ -45,7 +45,6 @@ export const Navbar = async () => {
                     >
                       Dashboard ✨
                     </Link>
-
                     <Link
                       href="/create-survey"
                       className={buttonVariants({
@@ -57,7 +56,7 @@ export const Navbar = async () => {
                       Create survey
                       <ArrowRight className="size-5 ml-1.5" />
                     </Link>
-                    <div className="h-8 w-px bg-zinc-200 hidden sm:block" />
+                    <div className="h-8 w-px bg-muted-foreground sm:block" />
                     <ModeToggle />
                   </>
                 ) : null}
@@ -84,15 +83,7 @@ export const Navbar = async () => {
                   Login
                 </a>
 
-                <div className="h-8 w-px bg-zinc-200 hidden sm:block" />
                 <ModeToggle />
-                {/* <Link href='/configure/upload' className={buttonVariants({
-                                    size: 'sm',
-                                    className: 'hidden sm:flex items-center gap-1'
-                                })}>
-                                    Create survey
-                                    <ArrowRight className='size-5 ml-1.5' />
-                                </Link> */}
               </>
             )}
           </div>

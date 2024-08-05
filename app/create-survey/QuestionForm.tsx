@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { Survey } from '@/lib/validation';
-import { SelectionType } from '@prisma/client';
+import { QuestionType } from '@prisma/client';
 import { Check, Ellipsis, Trash2, X } from 'lucide-react';
 import {
   Control,
@@ -22,7 +22,7 @@ import {
   useWatch,
 } from 'react-hook-form';
 
-type survey = keyof typeof SelectionType;
+type survey = keyof typeof QuestionType;
 
 const LABEL_MAP: Record<survey, string> = {
   SINGLE_CHOICE: 'Single Choice',
@@ -90,7 +90,7 @@ export const QuestionForm = ({
                 >
                   <Label>Question type</Label>
                 </DropdownMenuItem>
-                {Object.keys(SelectionType).map((type) => (
+                {Object.keys(QuestionType).map((type) => (
                   <DropdownMenuItem
                     key={type}
                     className={cn(

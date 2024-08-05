@@ -13,7 +13,7 @@ import {
 import { db } from '@/db';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import { format } from 'date-fns';
-import { Eye } from 'lucide-react';
+import { Eye, Ghost } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import {
@@ -56,7 +56,29 @@ export default async function Page() {
   });
 
   if (!surveys || !surveys.length) {
-    return notFound();
+    return (
+      <div className="flex min-h-screen w-full bg-muted/40 mt-4">
+        <div className="max-w-7xl w-full mx-auto flex flex-col sm:gap-4 sm:py-4">
+          <div className="flex flex-col gap-16">
+            <div className="flex flex-col items-center justify-center">
+              <Ghost className="size-8 text-muted-foreground my-2 animate-bounce" />
+              <p className="text-muted-foreground text-lg">
+                You haven&apos;t created any surveys yet.
+              </p>
+              <Link
+                href="/create-survey"
+                className={buttonVariants({
+                  variant: 'ghost',
+                  size: 'lg',
+                })}
+              >
+                Create a survey
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const USERS_GOAL = 250;
@@ -71,9 +93,7 @@ export default async function Page() {
             <Card>
               <CardHeader className="pb-2">
                 <CardDescription>Last Week</CardDescription>
-                <CardTitle className="text-4xl">
-                  {formatPrice(100)}
-                </CardTitle>
+                <CardTitle className="text-4xl">{formatPrice(100)}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-sm text-muted-foreground">
@@ -81,15 +101,13 @@ export default async function Page() {
                 </div>
               </CardContent>
               <CardFooter>
-                <Progress value={((50) * 100) / WEEKLY_GOAL} />
+                <Progress value={(50 * 100) / WEEKLY_GOAL} />
               </CardFooter>
             </Card>
             <Card>
               <CardHeader className="pb-2">
                 <CardDescription>Last Month</CardDescription>
-                <CardTitle className="text-4xl">
-                  {formatPrice(30)}
-                </CardTitle>
+                <CardTitle className="text-4xl">{formatPrice(30)}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-sm text-muted-foreground">
@@ -97,9 +115,7 @@ export default async function Page() {
                 </div>
               </CardContent>
               <CardFooter>
-                <Progress
-                  value={((50) * 100) / MONTHLY_GOAL}
-                />
+                <Progress value={(50 * 100) / MONTHLY_GOAL} />
               </CardFooter>
             </Card>
           </div>

@@ -60,12 +60,12 @@ export const CreateSurvey = () => {
     mutationFn: createSurvey,
     onSuccess: ({ surveyId }) => {
       toast.success('Survey created successfully');
-      router.push(`/survey/${surveyId}`);
+      router.push(`/survey?id=${surveyId}`);
       reset();
     },
     onError: (error) => {
-      console.error('Error creating survey:', error);
-      toast.error(error.message);
+      console.error('Error creating survey:', error.message);
+      toast.error('Something went wrong. Please try again later.');
     },
   });
 
@@ -74,7 +74,7 @@ export const CreateSurvey = () => {
       ...data,
       surveyType,
     };
-    // console.log(payload)
+    
     create(payload);
   };
 

@@ -3,9 +3,14 @@
 import { db } from '@/db';
 import { Survey } from '@/lib/validation';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
-import { SelectionType } from '@prisma/client';
+import { SurveyType } from '@prisma/client';
 
-export const createSurvey = async (data: Survey & { surveyType: keyof typeof SelectionType }) => {
+export const createSurvey = async (
+  data: Survey & {
+    surveyType: keyof typeof SurveyType;
+  }
+) => {
+  console.log("🚀 ~ data:", data)
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
@@ -29,7 +34,7 @@ export const createSurvey = async (data: Survey & { surveyType: keyof typeof Sel
       data: {
         title: data.title,
         description: data?.description,
-        surveyType: data.surveyType || 'SINGLE_CHOICE',
+        surveyType: data?.surveyType || 'SINGLE_CHOICE',
         userId: user.id,
       },
     });
@@ -39,7 +44,7 @@ export const createSurvey = async (data: Survey & { surveyType: keyof typeof Sel
         prisma.question.create({
           data: {
             text: question.text,
-            questionType: question?.questionType || 'SINGLE_CHOICE',    
+            questionType: question?.questionType || 'SINGLE_CHOICE',
             surveyId: createdSurvey.id,
             answers: {
               create: question.answers.map((answer) => ({

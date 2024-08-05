@@ -1,4 +1,4 @@
-import { SelectionType } from '@prisma/client';
+import { QuestionType } from '@prisma/client';
 import { number, z } from 'zod';
 
 export const surveySchema = z.object({
@@ -8,9 +8,9 @@ export const surveySchema = z.object({
     z.object({
       id: z.number(),
       questionType: z.enum([
-        SelectionType.SINGLE_CHOICE,
-        SelectionType.SHORT_ANSWER,
-        SelectionType.MULTIPLE_CHOICE,
+        QuestionType.SINGLE_CHOICE,
+        QuestionType.SHORT_ANSWER,
+        QuestionType.MULTIPLE_CHOICE,
       ]),
       text: z.string(),
       answers: z.array(z.object({ id: number(), text: z.string() })),

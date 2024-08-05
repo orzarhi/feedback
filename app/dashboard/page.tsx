@@ -145,7 +145,7 @@ export default async function Page() {
                       link={`${process.env.NEXT_PUBLIC_BASE_URL}/survey/${survey.id}`}
                     />
                     <Link
-                      href={`/survey/${survey.id}`}
+                      href={`/survey?id=${survey.id}`}
                       className={buttonVariants({
                         variant: 'link',
                         size: 'icon',

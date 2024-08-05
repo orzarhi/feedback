@@ -1,21 +1,8 @@
-import { notFound } from 'next/navigation';
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-  SelectTrigger,
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
 import { db } from '@/db';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
-import { Checkbox } from '@/components/ui/checkbox';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { format } from 'date-fns';
+import { notFound } from 'next/navigation';
+import { SurveyForm } from './SurveyForm';
 
 interface PageProps {
   searchParams: {
@@ -75,84 +62,8 @@ export default async function Page({ searchParams }: PageProps) {
           {format(survey.createdAt, 'MMMM dd, yyyy')}
         </p>
       </div>
-      <form className="mt-8 space-y-8">
-        <div className="space-y-4">
-          {survey.questions.map((question, index) => (
-            <div key={question.id} className="space-y-2">
-              {index + 1}. <Label htmlFor={`question-${index}`}>{question.text}</Label>
-              {question.questionType === 'SINGLE_CHOICE' ? (
-                <RadioGroup key={index} name={`question-${index}`}>
-                  {question.answers.map((answer, answerIndex) => (
-                    <div key={answer.id} className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value={answer.text}
-                        id={`question-${index}-answer-${answerIndex}`}
-                      />
-                      <Label htmlFor={`question-${index}-answer-${answerIndex}`}>
-                        {answer.text}
-                      </Label>
-                    </div>
-                  ))}
-                </RadioGroup>
-              ) : (
-                question.answers.map((answer, answerIndex) => {
-                  if (question.questionType === 'SHORT_ANSWER') {
-                    return (
-                      <Input
-                        key={answerIndex}
-                        id={`question-${index}-answer-${answerIndex}`}
-                        name={`question-${index}`}
-                        placeholder={answer.text}
-                      />
-                    );
-                  } else if (question.questionType === 'MULTIPLE_CHOICE') {
-                    return (
-                      <div key={answerIndex} className="flex items-center space-x-2">
-                        <Checkbox
-                          id={`question-${index}-answer-${answerIndex}`}
-                          name={`question-${index}`}
-                          value={answer.text}
-                        />
-                        <Label htmlFor={`question-${index}-answer-${answerIndex}`}>
-                          {answer.text}
-                        </Label>
-                      </div>
-                    );
-                  }
-                })
-              )}
-            </div>
-          ))}
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="satisfaction">
-            How satisfied are you with our product and services?
-          </Label>
-          <Select name="satisfaction">
-            <SelectTrigger className="w-full rounded-md border-input bg-background flex justify-between items-center px-3 py-2 text-foreground shadow-sm">
-              <SelectValue placeholder="Select an option" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="very-dissatisfied">Very Dissatisfied</SelectItem>
-              <SelectItem value="dissatisfied">Dissatisfied</SelectItem>
-              <SelectItem value="neutral">Neutral</SelectItem>
-              <SelectItem value="satisfied">Satisfied</SelectItem>
-              <SelectItem value="very-satisfied">Very Satisfied</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="feedback">
-            What do you like most about our products and services? (optional)
-          </Label>
-          <Textarea
-            id="feedback"
-            name="feedback"
-            rows={4}
-            placeholder="Enter your feedback"
-          />
-        </div>
-      </form>
+      {/* @ts-expect-error*/}
+      <SurveyForm survey={survey} />
     </div>
   );
 }

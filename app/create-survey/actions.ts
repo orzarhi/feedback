@@ -10,7 +10,6 @@ export const createSurvey = async (
     surveyType: keyof typeof SurveyType;
   }
 ) => {
-  console.log("🚀 ~ data:", data)
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 

@@ -16,13 +16,18 @@ import { Textarea } from '@/components/ui/textarea';
 import { QuestionType, Survey } from '@prisma/client';
 import { useCallback } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { SATISFACTION } from '@/config';
+import { Satisfaction } from '@prisma/client';
+import { useMutation } from '@tanstack/react-query';
+import { saveSurveyResponse } from './actions';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import { SurveyResponse } from '@/lib/validation';
 
-type Satisfaction = keyof typeof SATISFACTION;
+type SatisfactionType = keyof typeof Satisfaction;
 
 type FormData = {
-  feedback: string;
-  satisfaction: Satisfaction;
+  feedback?: string;
+  satisfaction: SatisfactionType;
   [key: `question-${number}`]: string;
   [key: `question-${number}-answer-${number}`]: boolean;
 };
@@ -82,23 +87,44 @@ const LABEL_MAP: Record<Satisfaction, string> = {
 };
 
 export const SurveyForm = ({ survey }: SurveyFormProps) => {
+  const router = useRouter();
+
   const {
     control,
     handleSubmit,
     register,
-
     formState: { errors },
   } = useForm();
 
-  const onSubmit = useCallback(
-    (data: any) => {
-      const formattedData = formatSubmissionData(data, survey);
-      console.log(formattedData);
+  const { mutate: save, isPending } = useMutation({
+    mutationFn: saveSurveyResponse,
+    onSuccess: () => {
+      toast.success('Thank you, Survey response saved successfully');
+      router.push('/');
     },
-    [survey]
+    onError: (error) => {
+      console.error('Error creating survey:', error.message);
+      toast.error('Something went wrong. Please try again later.');
+    },
+  });
+
+  const onSubmit = useCallback(
+    (data: SurveyResponse) => {
+      const formattedData = formatSubmissionData(data, survey);
+
+      const payload = {
+        surveyId: survey.id,
+        ...formattedData,
+      };
+
+      // @ts-expect-error
+      save(payload);
+    },
+    [survey, save]
   );
 
   return (
+    // @ts-expect-error
     <form className="mt-8 space-y-8" onSubmit={handleSubmit(onSubmit)}>
       <div className="space-y-4">
         {survey.questions.map((question, index) => (
@@ -192,7 +218,7 @@ export const SurveyForm = ({ survey }: SurveyFormProps) => {
                 <SelectValue placeholder="Select an option" />
               </SelectTrigger>
               <SelectContent>
-                {Object.keys(SATISFACTION).map((key) => (
+                {Object.keys(Satisfaction).map((key) => (
                   <SelectItem key={key} value={key}>
                     {LABEL_MAP[key as Satisfaction]}
                   </SelectItem>
@@ -216,7 +242,14 @@ export const SurveyForm = ({ survey }: SurveyFormProps) => {
           {...register('feedback')}
         />
       </div>
-      <Button type="submit">Submit</Button>
+      <Button
+        type="submit"
+        disabled={isPending}
+        isLoading={isPending}
+        loadingText="Saving"
+      >
+        Save
+      </Button>
     </form>
   );
 };

@@ -29,6 +29,7 @@ export default async function Page({ searchParams }: PageProps) {
       id,
     },
     select: {
+      id: true,
       title: true,
       surveyType: true,
       description: true,

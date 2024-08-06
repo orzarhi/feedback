@@ -59,9 +59,9 @@ export const CreateSurvey = () => {
   const { mutate: create, isPending } = useMutation({
     mutationFn: createSurvey,
     onSuccess: ({ surveyId }) => {
-      toast.success('Survey created successfully');
       router.push(`/survey?id=${surveyId}`);
       reset();
+      toast.success('Survey created successfully');
     },
     onError: (error) => {
       console.error('Error creating survey:', error.message);

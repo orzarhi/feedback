@@ -24,7 +24,7 @@ export default function RootLayout({
           <Navbar />
           {children}
           <Toaster
-            position="top-center"
+            position="bottom-right"
             icons={{
               success: '🎉',
               error: '❌',

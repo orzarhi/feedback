@@ -32,7 +32,7 @@ model User {
   id               String           @id @default(cuid())
   email            String           @unique
   imageUrl         String?
-  surveyIdentifier String? // Save the surveyId while the user is logged into the system
+  
   survey           Survey[]
   response         SurveyResponse[]
 
@@ -75,9 +75,6 @@ model Answer {
   questionId String
   text       String
 
-  response   SurveyResponse? @relation(fields: [responseId], references: [id])
-  responseId String?
-
   answerResponse AnswerResponse[]
 
   createdAt DateTime @default(now())
@@ -93,8 +90,6 @@ model SurveyResponse {
   answers      AnswerResponse[]
   feedback     String?
   satisfaction Satisfaction
-
-  answer Answer[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

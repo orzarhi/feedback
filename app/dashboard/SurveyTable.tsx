@@ -18,6 +18,7 @@ import { format } from 'date-fns';
 import { buttonVariants } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Satisfaction } from '@prisma/client';
+import Image from 'next/image';
 
 type SurveyResponse = {
   id: string;
@@ -76,8 +77,8 @@ export const SurveyTable = ({ surveys }: SurveyTableProps) => {
             </TableHead>
             <TableHead className="hidden sm:table-cell">Title</TableHead>
             <TableHead>Created At</TableHead>
-            <TableHead>Questions</TableHead>
-            <TableHead className="text-right">Action</TableHead>
+            <TableHead  className='text-center'>Questions</TableHead>
+            <TableHead className="text-center">Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -96,8 +97,8 @@ export const SurveyTable = ({ surveys }: SurveyTableProps) => {
                   {survey.title}
                 </TableCell>
                 <TableCell>{format(survey.createdAt, 'dd/MM/yyyy')}</TableCell>
-                <TableCell>{survey._count.questions}</TableCell>
-                <TableCell className="text-right">
+                <TableCell className='text-center'>{survey._count.questions}</TableCell>
+                <TableCell className="text-center flex sm:block">
                   <CopyLink
                     link={`${process.env.NEXT_PUBLIC_BASE_URL}/survey/${survey.id}`}
                   />
@@ -120,26 +121,28 @@ export const SurveyTable = ({ surveys }: SurveyTableProps) => {
                   >
                     <TableCell colSpan={5}>
                       <div className="p-4">
-                        <h2 className="text-xl font-bold">Survey Responses</h2>
+                        <h2 className="text-xl font-bold">
+                          Survey Responses ({survey.response.length})
+                        </h2>
                         <Table>
                           <TableHeader>
                             <TableRow>
                               <TableHead>User</TableHead>
                               <TableHead>Feedback</TableHead>
                               <TableHead>Satisfaction</TableHead>
-                              <TableHead>Answers</TableHead>
+                              <TableHead className='hidden lg:table-cell'>Answers</TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
                             {survey.response.map((response) => (
                               <TableRow key={response.id}>
                                 <TableCell>{response.user.email}</TableCell>
-                                <TableCell>{response.feedback || 'N/A'}</TableCell>
+                                <TableCell className='overflow-hidden truncate w-2'>{response.feedback || 'N/A'}</TableCell>
                                 <TableCell>{response.satisfaction}</TableCell>
                                 <TableCell>
                                   {response.answers.map((answer) => (
-                                    <div key={answer.id}>
-                                      <strong className="text-muted-foreground">
+                                    <div key={answer.id} className='hidden lg:block '>
+                                      <strong className="text-muted-foreground" >
                                         {answer.question.text}:
                                       </strong>{' '}
                                       {answer.answer.text}

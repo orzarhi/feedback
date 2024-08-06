@@ -18,8 +18,8 @@ export const Navbar = async () => {
       <MaxWidthWrapper>
         <div className="flex h-14 items-center justify-between border-b border-zinc-200 dark:border-zinc-600">
           <Link href="/" className="flex z-40 font-semibold">
-            feed<span className="text-orange-400">back</span>
-            <Image src="/logo.svg" alt="logo" width={25} height={25} />
+            <Image src="/logo.svg" alt="logo" width={20} height={20} />
+            feed<span className="text-primary">back</span>
           </Link>
           <div className="h-full flex items-center space-x-4">
             {user ? (
@@ -29,6 +29,7 @@ export const Navbar = async () => {
                   className={buttonVariants({
                     size: 'sm',
                     variant: 'ghost',
+                    className: 'relative left-4 sm:left-0',
                   })}
                 >
                   Sign out

@@ -15,7 +15,7 @@ export const CopyLink = ({ link }: { link: string }) => {
   };
   return (
     <Button size="icon" variant="link" onClick={copyToClipboard}>
-      {copied ? <Check className="size-5" /> : <Copy className="size-5" />}
+      {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
     </Button>
   );
 };

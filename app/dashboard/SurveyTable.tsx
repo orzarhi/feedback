@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import { CopyLink } from '@/components/CopyLink';
+import { buttonVariants } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -11,14 +12,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { CopyLink } from '@/components/CopyLink';
-import Link from 'next/link';
-import { ChevronDown, ChevronUp, Eye } from 'lucide-react';
-import { format } from 'date-fns';
-import { buttonVariants } from '@/components/ui/button';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Satisfaction } from '@prisma/client';
-import Image from 'next/image';
+import { format } from 'date-fns';
+import { AnimatePresence, motion } from 'framer-motion';
+import { ChevronDown, ChevronUp, Eye } from 'lucide-react';
+import Link from 'next/link';
+import React, { useState } from 'react';
 
 type SurveyResponse = {
   id: string;
@@ -55,14 +54,22 @@ type Survey = {
 
 type Surveys = Survey[];
 
+const LABEL_MAP: Record<Satisfaction, string> = {
+  VERY_SATISFIED: 'Very Satisfied',
+  SATISFIED: 'Satisfied',
+  NEUTRAL: 'Neutral',
+  DISSATISFIED: 'Dissatisfied',
+  VERY_DISSATISFIED: 'Very Dissatisfied',
+};
+
 interface SurveyTableProps {
   surveys: Surveys;
 }
 
 export const SurveyTable = ({ surveys }: SurveyTableProps) => {
-  const [expandedSurveyId, setExpandedSurveyId] = useState(null);
+  const [expandedSurveyId, setExpandedSurveyId] = useState<string | null>(null);
 
-  const handleToggleExpand = (id: any) => {
+  const handleToggleExpand = (id: string) => {
     setExpandedSurveyId(expandedSurveyId === id ? null : id);
   };
 
@@ -77,7 +84,7 @@ export const SurveyTable = ({ surveys }: SurveyTableProps) => {
             </TableHead>
             <TableHead className="hidden sm:table-cell">Title</TableHead>
             <TableHead>Created At</TableHead>
-            <TableHead  className='text-center'>Questions</TableHead>
+            <TableHead className="text-center">Questions</TableHead>
             <TableHead className="text-center">Action</TableHead>
           </TableRow>
         </TableHeader>
@@ -97,7 +104,7 @@ export const SurveyTable = ({ surveys }: SurveyTableProps) => {
                   {survey.title}
                 </TableCell>
                 <TableCell>{format(survey.createdAt, 'dd/MM/yyyy')}</TableCell>
-                <TableCell className='text-center'>{survey._count.questions}</TableCell>
+                <TableCell className="text-center">{survey._count.questions}</TableCell>
                 <TableCell className="text-center flex sm:block">
                   <CopyLink
                     link={`${process.env.NEXT_PUBLIC_BASE_URL}/survey/${survey.id}`}
@@ -106,7 +113,7 @@ export const SurveyTable = ({ surveys }: SurveyTableProps) => {
                     href={`/survey?id=${survey.id}`}
                     className={buttonVariants({ variant: 'link', size: 'icon' })}
                   >
-                    <Eye className="size-5" />
+                    <Eye className="size-4" />
                   </Link>
                 </TableCell>
               </TableRow>
@@ -130,19 +137,23 @@ export const SurveyTable = ({ surveys }: SurveyTableProps) => {
                               <TableHead>User</TableHead>
                               <TableHead>Feedback</TableHead>
                               <TableHead>Satisfaction</TableHead>
-                              <TableHead className='hidden lg:table-cell'>Answers</TableHead>
+                              <TableHead className="hidden lg:table-cell">
+                                Answers
+                              </TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
                             {survey.response.map((response) => (
                               <TableRow key={response.id}>
                                 <TableCell>{response.user.email}</TableCell>
-                                <TableCell className='overflow-hidden truncate w-2'>{response.feedback || 'N/A'}</TableCell>
-                                <TableCell>{response.satisfaction}</TableCell>
+                                <TableCell className="overflow-hidden truncate w-2">
+                                  {response.feedback || 'N/A'}
+                                </TableCell>
+                                <TableCell>{LABEL_MAP[response.satisfaction]}</TableCell>
                                 <TableCell>
                                   {response.answers.map((answer) => (
-                                    <div key={answer.id} className='hidden lg:block '>
-                                      <strong className="text-muted-foreground" >
+                                    <div key={answer.id} className="hidden lg:block ">
+                                      <strong className="text-muted-foreground">
                                         {answer.question.text}:
                                       </strong>{' '}
                                       {answer.answer.text}

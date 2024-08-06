@@ -1,21 +1,4 @@
-import { CopyLink } from '@/components/CopyLink';
 import { buttonVariants } from '@/components/ui/button';
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import { db } from '@/db';
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
-import { format } from 'date-fns';
-import { Eye, Ghost } from 'lucide-react';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
 import {
   Card,
   CardContent,
@@ -25,8 +8,12 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { db } from '@/db';
 import { formatPrice } from '@/lib/utils';
-import React from 'react';
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
+import { Ghost } from 'lucide-react';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { SurveyTable } from './SurveyTable';
 
 export default async function Page() {

@@ -13,15 +13,14 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { QuestionType, Survey } from '@prisma/client';
-import { useCallback } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { Satisfaction } from '@prisma/client';
-import { useMutation } from '@tanstack/react-query';
-import { saveSurveyResponse } from './actions';
-import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
 import { SurveyResponse } from '@/lib/validation';
+import { QuestionType, Satisfaction, Survey } from '@prisma/client';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { useCallback } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { saveSurveyResponse } from './actions';
 
 type SatisfactionType = keyof typeof Satisfaction;
 
@@ -242,14 +241,17 @@ export const SurveyForm = ({ survey }: SurveyFormProps) => {
           {...register('feedback')}
         />
       </div>
-      <Button
-        type="submit"
-        disabled={isPending}
-        isLoading={isPending}
-        loadingText="Saving"
-      >
-        Save
-      </Button>
+      <div className="flex justify-end">
+        <Button
+          type="submit"
+          disabled={isPending}
+          isLoading={isPending}
+          loadingText="Saving"
+          className="w-32"
+        >
+          Save
+        </Button>
+      </div>
     </form>
   );
 };

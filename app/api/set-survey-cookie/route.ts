@@ -1,20 +1,14 @@
-import { cookies } from 'next/headers';
-import { NextResponse } from 'next/server';
+import { setCookie } from 'cookies-next';
 
 export async function POST(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const id = searchParams.get('id');
+  const body = await request.json();
+  const { id } = body;
 
   if (!id) {
-    return NextResponse.json({ success: false, message: 'Missing survey id' });
+    return new Response('Invalid survey id', { status: 400 });
   }
 
-  cookies().set('surveyId', id, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: 60 * 60 * 24, // 24 hours
-    path: '/',
-  });
+  setCookie('key', 'value');
 
-  return NextResponse.json({ success: true });
+  return new Response('OK');
 }

@@ -57,7 +57,7 @@ export const Navbar = async () => {
                       <ArrowRight className="size-5 ml-1.5" />
                     </Link>
                     <div className="h-8 w-px bg-muted-foreground sm:block" />
-                    <ModeToggle />
+                    {/* <ModeToggle /> */}
                   </>
                 ) : null}
               </>
@@ -82,10 +82,10 @@ export const Navbar = async () => {
                 >
                   Login
                 </a>
-
-                <ModeToggle />
               </>
             )}
+
+            <ModeToggle />
           </div>
         </div>
       </MaxWidthWrapper>

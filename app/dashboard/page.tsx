@@ -80,13 +80,11 @@ export default async function Page() {
       </div>
     );
   }
-
-  const USERS_GOAL = 250;
   const WEEKLY_GOAL = 500;
   const MONTHLY_GOAL = 2000;
 
   return (
-    <div className="flex min-h-screen w-full bg-muted/40 mt-4">
+    <div className="flex min-h-screen w-full mt-4">
       <div className="max-w-7xl w-full mx-auto flex flex-col sm:gap-4 sm:py-4">
         <div className="flex flex-col gap-16">
           <div className="grid gap-4 sm:grid-cols-2">

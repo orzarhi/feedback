@@ -29,9 +29,9 @@ enum Satisfaction {
 }
 
 model User {
-  id    String @id @default(cuid())
-  email String @unique
-
+  id               String           @id @default(cuid())
+  email            String           @unique
+  imageUrl         String?
   surveyIdentifier String? // Save the surveyId while the user is logged into the system
   survey           Survey[]
   response         SurveyResponse[]

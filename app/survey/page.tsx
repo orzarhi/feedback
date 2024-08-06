@@ -1,8 +1,9 @@
 import { db } from '@/db';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import { format } from 'date-fns';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { SurveyForm } from './SurveyForm';
+import { SaveToLocalStorage } from '@/components/SaveToLocalStorage';
 
 interface PageProps {
   searchParams: {
@@ -21,7 +22,7 @@ export default async function Page({ searchParams }: PageProps) {
   const user = await getUser();
 
   if (!user?.id || !user?.email) {
-    return notFound();
+    return <SaveToLocalStorage storageKey="surveyId" value={id} />;
   }
 
   const survey = await db.survey.findUnique({

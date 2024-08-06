@@ -26,6 +26,8 @@ import {
 } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { formatPrice } from '@/lib/utils';
+import React from 'react';
+import { SurveyTable } from './SurveyTable';
 
 export default async function Page() {
   const { getUser } = getKindeServerSession();
@@ -47,6 +49,33 @@ export default async function Page() {
       title: true,
       description: true,
       createdAt: true,
+      response: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              email: true,
+              imageUrl: true,
+            },
+          },
+          answers: {
+            include: {
+              question: {
+                select: {
+                  id: true,
+                  text: true,
+                },
+              },
+              answer: {
+                select: {
+                  id: true,
+                  text: true,
+                },
+              },
+            },
+          },
+        },
+      },
       _count: {
         select: {
           questions: true,
@@ -118,11 +147,12 @@ export default async function Page() {
             </Card>
           </div>
 
-          <h1 className="text-4xl font-bold tracking-tight">Your Surveys</h1>
+          {/* <h1 className="text-4xl font-bold tracking-tight">Your Surveys</h1>
           <Table>
             <TableCaption>A list of your recent surveys.</TableCaption>
             <TableHeader>
               <TableRow>
+                <TableHead>Id</TableHead>
                 <TableHead className="hidden sm:table-cell">Title</TableHead>
                 <TableHead>Created At</TableHead>
                 <TableHead className="">Questions</TableHead>
@@ -132,6 +162,8 @@ export default async function Page() {
             <TableBody>
               {surveys.map((survey) => (
                 <TableRow key={survey.id}>
+                  <TableCell>{survey.id}</TableCell>
+
                   <TableCell className="font-medium hidden sm:table-cell overflow-hidden truncate w-2">
                     {survey.title}
                   </TableCell>
@@ -161,7 +193,62 @@ export default async function Page() {
                 <TableCell className="text-right">{surveys?.length}</TableCell>
               </TableRow>
             </TableFooter>
-          </Table>
+          </Table> */}
+          <SurveyTable surveys={surveys} />
+          {/* <h1 className="text-4xl font-bold tracking-tight">Your Responses</h1>
+          <Table>
+            <TableCaption>A list of your recent surveys.</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead>User</TableHead>
+                <TableHead>Feedback</TableHead>
+                <TableHead>Satisfaction</TableHead>
+                <TableHead>Answers</TableHead>
+                <TableHead className="text-right">Action</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {surveys.map((survey) => (
+                <React.Fragment key={survey.id}>
+                  {survey.response.map((response) => (
+                    <TableRow key={response.id}>
+                      <TableCell>{response.user.email}</TableCell>
+                      <TableCell>{response.feedback || 'N/A'}</TableCell>
+                      <TableCell>{response.satisfaction}</TableCell>
+                      <TableCell>
+                        {response.answers.map((answer, index) => (
+                          <div key={index}>
+                            <strong>{answer.question.text}:</strong> {answer.answer.text}
+                          </div>
+                        ))}
+                     
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <CopyLink
+                          link={`${process.env.NEXT_PUBLIC_BASE_URL}/survey/${survey.id}`}
+                        />
+                        <Link
+                          href={`/survey?id=${survey.id}`}
+                          className={buttonVariants({
+                            variant: 'link',
+                            size: 'icon',
+                          })}
+                        >
+                          <Eye className="size-5" />
+                        </Link>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </React.Fragment>
+              ))}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell colSpan={4}>Total surveys</TableCell>
+                <TableCell className="text-right">{surveys.length}</TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table> */}
         </div>
       </div>
     </div>

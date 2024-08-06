@@ -3,12 +3,14 @@
 import { db } from '@/db';
 import { SurveyResponse } from '@/lib/validation';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
+import { revalidatePath } from 'next/cache';
 
 export const saveSurveyResponse = async (
   data: SurveyResponse & {
     surveyId: string;
   }
 ) => {
+  console.log('data!',data)
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
@@ -19,7 +21,7 @@ export const saveSurveyResponse = async (
   const answerResponsesData = data.questions.flatMap((question) =>
     question.answer.map((answer) => ({
       question: { connect: { id: question.questionId.toString() } },
-      answer: { connect: { id: answer.answerId.toString() } },
+      answer: { connect: { id: answer.answerId?.toString() } },
       text: answer.text,
     }))
   );
@@ -39,7 +41,9 @@ export const saveSurveyResponse = async (
   if (!surveyResponse) {
     throw new Error('Failed to save survey response');
   }
-
+  
+  revalidatePath('/dashboard');
+  
   return { success: true };
 };
 

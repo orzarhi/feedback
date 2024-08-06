@@ -1,5 +1,4 @@
-// @ts-nocheck
-
+//@ts-nocheck
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -16,9 +15,10 @@ import { toast } from 'sonner';
 import { createSurvey } from './actions';
 import { QuestionForm } from './QuestionForm';
 import { TypeSelector } from './TypeSelector';
+import { wait } from '@/lib/utils';
 
 export const CreateSurvey = () => {
-  const [surveyType, setSurveyType] = useState<keyof typeof SurveyType >('');
+  const [surveyType, setSurveyType] = useState<keyof typeof SurveyType>('DEFINES_ALONE');
 
   const router = useRouter();
 
@@ -58,9 +58,10 @@ export const CreateSurvey = () => {
 
   const { mutate: create, isPending } = useMutation({
     mutationFn: createSurvey,
-    onSuccess: ({ surveyId }) => {
+    onSuccess: async ({ surveyId }) => {
       router.push(`/survey?id=${surveyId}`);
       reset();
+      await wait(600);
       toast.success('Survey created successfully');
     },
     onError: (error) => {
@@ -74,7 +75,7 @@ export const CreateSurvey = () => {
       ...data,
       surveyType,
     };
-    
+
     create(payload);
   };
 
@@ -133,8 +134,13 @@ export const CreateSurvey = () => {
         <div className="mt-6 space-y-1">
           <Label>Survey Type</Label>
           <TypeSelector surveyType={surveyType} setSurveyType={setSurveyType} />
-          <p className='text-xs text-muted-foreground'>You can change the type for all the questions together here.</p>
-          <p className='text-xs font-semibold text-muted-foreground'> If you chose different types, don&apos;t refer to me.</p>
+          <p className="text-xs text-muted-foreground">
+            You can change the type for all the questions together here.
+          </p>
+          <p className="text-xs font-semibold text-muted-foreground">
+            {' '}
+            If you choose different types, don&apos;t refer to me.
+          </p>
         </div>
 
         <div className="mt-6">

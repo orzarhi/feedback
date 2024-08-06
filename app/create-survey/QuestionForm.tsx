@@ -144,7 +144,16 @@ export const QuestionForm = ({
           <div key={answer.id} className="flex items-center justify-between">
             <div className="flex-1">
               <Label htmlFor={`answer-${questionIndex}-${answerIndex}`}>
-                Answer {answerIndex + 1}
+                Answer {answerIndex + 1}{' '}
+                <span
+                  className={cn('text-muted-foreground', {
+                    hidden: watchedQuestionType !== 'SHORT_ANSWER',
+                  })}
+                >
+                  {watchedQuestionType === 'SHORT_ANSWER'
+                    ? 'Your answer will appear as a placeholder'
+                    : null}
+                </span>
               </Label>
               <div className="mt-1">
                 <Input

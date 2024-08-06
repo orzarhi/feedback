@@ -4,6 +4,7 @@ import { db } from '@/db';
 import { Survey } from '@/lib/validation';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import { SurveyType } from '@prisma/client';
+import { revalidatePath } from 'next/cache';
 
 export const createSurvey = async (
   data: Survey & {
@@ -61,6 +62,8 @@ export const createSurvey = async (
   if (!createSurvey) {
     throw new Error('Failed to create survey');
   }
+
+  revalidatePath('/dashboard');
 
   return { success: true, surveyId: createSurvey.id };
 };

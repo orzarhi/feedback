@@ -12,6 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { cn } from '@/lib/utils';
 import { Satisfaction } from '@prisma/client';
 import { format } from 'date-fns';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -92,7 +93,9 @@ export const SurveyTable = ({ surveys }: SurveyTableProps) => {
           {surveys.map((survey) => (
             <React.Fragment key={survey.id}>
               <TableRow>
-                <TableCell>
+                <TableCell className={cn('',{
+                    'invisible': !survey.response.length
+                })}>
                   <button
                     onClick={() => handleToggleExpand(survey.id)}
                     className={buttonVariants({ variant: 'link', size: 'icon' })}
@@ -107,7 +110,7 @@ export const SurveyTable = ({ surveys }: SurveyTableProps) => {
                 <TableCell className="text-center">{survey._count.questions}</TableCell>
                 <TableCell className="text-center flex sm:block">
                   <CopyLink
-                    link={`${process.env.NEXT_PUBLIC_BASE_URL}/survey/${survey.id}`}
+                    link={`${process.env.NEXT_PUBLIC_BASE_URL}/survey?id=${survey.id}`}
                   />
                   <Link
                     href={`/survey?id=${survey.id}`}

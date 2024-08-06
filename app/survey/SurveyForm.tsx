@@ -21,6 +21,7 @@ import { useCallback } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { saveSurveyResponse } from './actions';
+import { wait } from '@/lib/utils';
 
 type SatisfactionType = keyof typeof Satisfaction;
 
@@ -55,7 +56,10 @@ const formatSubmissionData = (data: FormData, survey: SurveyFormProps['survey'])
       } else if (question.questionType === 'SHORT_ANSWER') {
         return {
           questionId,
-          answer: [{ answerId: null, text: data[`question-${questionId}`] }],
+          answer: question.answers.map((answer) => ({
+            answerId: answer.id,
+            text: data[`question-${questionId}-answer-${answer.id}`],
+          })),
         };
       }
       return { questionId, answer: [] };
@@ -97,9 +101,10 @@ export const SurveyForm = ({ survey }: SurveyFormProps) => {
 
   const { mutate: save, isPending } = useMutation({
     mutationFn: saveSurveyResponse,
-    onSuccess: () => {
-      toast.success('Thank you, Survey response saved successfully');
+    onSuccess: async () => {
       router.push('/');
+      await wait(400);
+      toast.success('Thank you, Survey response saved successfully');
     },
     onError: (error) => {
       console.error('Error creating survey:', error.message);
@@ -188,11 +193,14 @@ export const SurveyForm = ({ survey }: SurveyFormProps) => {
             </div>
             {question.questionType === 'SHORT_ANSWER' && (
               <>
-                <Input
-                  id={`question-${question.id}`}
-                  {...register(`question-${question.id}`)}
-                  placeholder="Enter your answer"
-                />
+                {question.answers.map((answer) => (
+                  <Input
+                    key={answer.id}
+                    id={`question-${question.id}-answer-${answer.id}`}
+                    {...register(`question-${question.id}-answer-${answer.id}`)}
+                    placeholder={answer.text}
+                  />
+                ))}
                 {errors[`question-${question.id}`] && (
                   <p className="error_message">
                     {errors[`question-${question.id}`]?.message?.toString()}

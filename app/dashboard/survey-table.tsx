@@ -15,9 +15,11 @@ import { cn } from '@/lib/utils';
 import { Satisfaction } from '@prisma/client';
 import { format } from 'date-fns';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, Copy, Eye, Telescope, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
-import { DropdownOptions } from './dropdown-options';
+import { DropdownOptions } from '@/components/dropdown-options';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 type SurveyResponse = {
   id: string;
@@ -70,10 +72,21 @@ interface SurveyTableProps {
 }
 
 export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
+  const router = useRouter();
+
   const [expandedSurveyId, setExpandedSurveyId] = useState<string | null>(null);
+  const [_, setCopied] = useState<boolean>(false);
 
   const handleToggleExpand = (id: string) => {
     setExpandedSurveyId(expandedSurveyId === id ? null : id);
+  };
+
+  const copyToClipboard = (link: string) => {
+    navigator.clipboard.writeText(link).then(() => {
+      setCopied(true);
+      toast.success('Link copied to clipboard.');
+      setTimeout(() => setCopied(false), 2000);
+    });
   };
 
   return (
@@ -122,7 +135,28 @@ export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
                 </TableCell>
                 <TableCell className="text-center">{survey._count.questions}</TableCell>
                 <TableCell className="text-center flex sm:block">
-                 <DropdownOptions surveyId={survey.id}/>
+                  <DropdownOptions
+                    items={[
+                      {
+                        label: 'Copy',
+                        icon: <Copy className="size-4" />,
+                        onClick: () =>
+                          copyToClipboard(
+                            `${process.env.NEXT_PUBLIC_BASE_URL}/survey?id=${survey.id}`
+                          ),
+                      },
+                      {
+                        label: 'Show',
+                        icon: <Eye className="size-4" />,
+                        onClick: () => router.push(`/survey?id=${survey.id}`),
+                      },
+                      {
+                        label: 'Delete',
+                        icon: <Trash2 className="size-4" />,
+                        onClick: () => {},
+                      },
+                    ]}
+                  />
                 </TableCell>
               </TableRow>
               <AnimatePresence>
@@ -134,7 +168,7 @@ export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <TableCell colSpan={5}>
+                    <TableCell colSpan={6}>
                       <div className="p-4">
                         <h2 className="text-xl font-bold">
                           Survey Responses ({survey.response.length})
@@ -146,9 +180,7 @@ export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
                               <TableHead>Feedback</TableHead>
                               <TableHead>Satisfaction</TableHead>
                               <TableHead>Created At</TableHead>
-                              <TableHead className="hidden lg:table-cell">
-                                Answers
-                              </TableHead>
+                              <TableHead>Actions</TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
@@ -165,15 +197,24 @@ export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
                                     {format(response.createdAt, 'HH:mm:ss')}
                                   </span>
                                 </TableCell>
-                                <TableCell>
-                                  {response.answers.map((answer) => (
+                                <TableCell className="text-center">
+                                  {/* {response.answers.map((answer) => (
                                     <div key={answer.id} className="hidden lg:block">
                                       <strong className="text-muted-foreground">
                                         {answer.question.text}:
                                       </strong>{' '}
                                       {answer.answer.text}
                                     </div>
-                                  ))}
+                                  ))} */}
+                                  <DropdownOptions
+                                    items={[
+                                      {
+                                        label: 'Quick View',
+                                        icon: <Telescope className="size-4" />,
+                                        onClick: () => {},
+                                      },
+                                    ]}
+                                  />
                                 </TableCell>
                               </TableRow>
                             ))}

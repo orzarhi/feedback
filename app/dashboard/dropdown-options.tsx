@@ -1,4 +1,4 @@
-import { IconMenu } from '@/components/IconMenu';
+import { IconMenu } from '@/components/icon-menu';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,

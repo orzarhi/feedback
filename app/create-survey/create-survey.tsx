@@ -13,10 +13,10 @@ import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { createSurvey } from './actions';
-import { QuestionForm } from './QuestionForm';
-import { TypeSelector } from './TypeSelector';
+import { QuestionForm } from './question-form';
+import { TypeSelector } from './type-selector';
 import { wait } from '@/lib/utils';
-import { DatePicker } from './DatePicker';
+import { DatePicker } from './date-picker';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 export const CreateSurvey = () => {
@@ -150,7 +150,7 @@ export const CreateSurvey = () => {
           <Label htmlFor="dueDate">Due Date</Label>
           <DatePicker setValue={setValue} watch={watch} errors={errors} />
         </div>
-        <div className="mt-6 space-y-1">
+        {/* <div className="mt-6 space-y-1">
           <Label>Survey Type</Label>
           <TypeSelector surveyType={surveyType} setSurveyType={setSurveyType} />
           <p className="text-xs text-muted-foreground">
@@ -160,7 +160,7 @@ export const CreateSurvey = () => {
             {' '}
             If you choose different types, don&apos;t refer to me.
           </p>
-        </div>
+        </div> */}
 
         <div className="flex justify-end">
           <Button

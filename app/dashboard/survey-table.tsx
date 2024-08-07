@@ -17,7 +17,7 @@ import { format } from 'date-fns';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import React, { useState } from 'react';
-import { DropdownOptions } from './DropdownOptions';
+import { DropdownOptions } from './dropdown-options';
 
 type SurveyResponse = {
   id: string;

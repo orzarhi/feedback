@@ -3,6 +3,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
@@ -84,10 +85,11 @@ export const QuestionForm = ({
               <DropdownMenuContent className="p-0 mx-1">
                 <DropdownMenuItem
                   disabled
-                  className="flex items-center p-2.5 cursor-default"
+                  className="flex items-center p-2.5 cursor-default text-muted-foreground"
                 >
                   <Label>Question type</Label>
                 </DropdownMenuItem>
+                <DropdownMenuSeparator />
                 {Object.keys(QuestionType).map((type) => (
                   <DropdownMenuItem
                     key={type}

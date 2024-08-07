@@ -13,7 +13,7 @@ import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import { Ghost } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { SurveyTable } from './SurveyTable';
+import { SurveyTable } from './survey-table';
 
 export default async function Page() {
   const { getUser } = getKindeServerSession();

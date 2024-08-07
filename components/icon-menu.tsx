@@ -2,13 +2,13 @@ import { ReactNode } from 'react';
 
 import { cn } from '@/lib/utils';
 
-interface MenuIconProps {
+interface IconMenuProps {
   icon: ReactNode;
   text: string;
   className?: string;
 }
 
-export const IconMenu = ({ className, icon, text }: MenuIconProps) => {
+export const IconMenu = ({ className, icon, text }: IconMenuProps) => {
   return (
     <div
       className={cn(

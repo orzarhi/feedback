@@ -1,11 +1,11 @@
 import React from 'react';
-import { MaxWidthWrapper } from './MaxWidthWrapper';
+import { MaxWidthWrapper } from './max-width-wrapper';
 import Link from 'next/link';
 import { buttonVariants } from './ui/button';
 import { ArrowRight } from 'lucide-react';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import Image from 'next/image';
-import { ModeToggle } from './ModeToggle';
+import { ModeToggle } from './mode-toggle';
 
 export const Navbar = async () => {
   const { getUser } = getKindeServerSession();

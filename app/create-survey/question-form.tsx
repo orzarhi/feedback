@@ -62,7 +62,7 @@ export const QuestionForm = ({
   });
 
   return (
-    <div className="shadow-sm rounded-md p-1">
+    <div className="p-1">
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <div className="flex justify-between items-center">
@@ -85,9 +85,9 @@ export const QuestionForm = ({
               <DropdownMenuContent className="p-0 mx-1">
                 <DropdownMenuItem
                   disabled
-                  className="flex items-center p-2.5 cursor-default text-muted-foreground"
+                  className="flex text-center p-2.5 cursor-default text-muted-foreground"
                 >
-                  <Label>Question type</Label>
+                  <Label className="mx-auto text-sm">Question type</Label>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 {Object.keys(QuestionType).map((type) => (

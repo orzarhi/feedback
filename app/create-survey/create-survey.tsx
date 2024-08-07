@@ -114,9 +114,13 @@ export const CreateSurvey = () => {
             />
           </div>
         </div>
-        <div className="">
+        <div className="flex flex-col space-y-2">
+          <Label htmlFor="dueDate">Due Date</Label>
+          <DatePicker setValue={setValue} watch={watch} errors={errors} />
+        </div>
+        <div>
           <Label>Questions</Label>
-          <div className="mt-1 space-y-4">
+          <div className="mt-1 space-y-4 border-b-2 border-b-zinc-100 dark:border-b-zinc-900">
             {questions.map((question, questionIndex) => (
               <QuestionForm
                 key={question.id}
@@ -146,10 +150,7 @@ export const CreateSurvey = () => {
             </Button>
           </div>
         </div>
-        <div className="flex flex-col space-y-2">
-          <Label htmlFor="dueDate">Due Date</Label>
-          <DatePicker setValue={setValue} watch={watch} errors={errors} />
-        </div>
+    
         {/* <div className="mt-6 space-y-1">
           <Label>Survey Type</Label>
           <TypeSelector surveyType={surveyType} setSurveyType={setSurveyType} />

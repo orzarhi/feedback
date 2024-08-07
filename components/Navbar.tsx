@@ -54,7 +54,7 @@ export const Navbar = async () => {
                           'hidden sm:flex items-center gap-1 bg-primary hover:bg-primary/90',
                       })}
                     >
-                      Create survey
+                      Get started
                       <ArrowRight className="size-5 ml-1.5" />
                     </Link>
                     <div className="h-8 w-px bg-muted-foreground sm:block" />

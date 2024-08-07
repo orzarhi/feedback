@@ -47,6 +47,7 @@ type Survey = {
   id: string;
   title: string;
   description: string | null;
+  dueDate: Date;
   createdAt: Date;
   response: SurveyResponse[];
   _count: {
@@ -87,6 +88,7 @@ export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
             </TableHead>
             <TableHead className="hidden sm:table-cell">Title</TableHead>
             <TableHead className="text-center">Created At</TableHead>
+            <TableHead className="text-center">Due Date</TableHead>
             <TableHead className="text-center">Questions</TableHead>
             <TableHead className="text-center">Action</TableHead>
           </TableRow>
@@ -110,7 +112,13 @@ export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
                 <TableCell className="font-medium hidden sm:table-cell overflow-hidden truncate w-2">
                   {survey.title}
                 </TableCell>
-                <TableCell className="text-center">{format(survey.createdAt, 'dd/MM/yyyy HH:mm:ss' )}</TableCell>
+                <TableCell className="text-center">
+                  {format(survey.createdAt, 'dd/MM/yyyy')}
+                  <span className="hidden sm:block">{format(survey.createdAt, 'HH:mm:ss')}</span>
+                </TableCell>
+                <TableCell className="text-center">
+                  {format(survey.dueDate, 'dd/MM/yyyy')}
+                </TableCell>
                 <TableCell className="text-center">{survey._count.questions}</TableCell>
                 <TableCell className="text-center flex sm:block">
                   <CopyLink
@@ -158,10 +166,15 @@ export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
                                   {response.feedback || 'N/A'}
                                 </TableCell>
                                 <TableCell>{LABEL_MAP[response.satisfaction]}</TableCell>
-                                <TableCell>{format(response.createdAt, 'dd/MM/yyyy HH:mm:ss')}</TableCell>
+                                <TableCell>
+                                  {format(response.createdAt, 'dd/MM/yyyy')}
+                                  <span className="hidden sm:block">
+                                    {format(response.createdAt, 'HH:mm:ss')}
+                                  </span>
+                                </TableCell>
                                 <TableCell>
                                   {response.answers.map((answer) => (
-                                    <div key={answer.id} className="hidden lg:block ">
+                                    <div key={answer.id} className="hidden lg:block">
                                       <strong className="text-muted-foreground">
                                         {answer.question.text}:
                                       </strong>{' '}
@@ -183,7 +196,7 @@ export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={4}>Total surveys</TableCell>
+            <TableCell colSpan={5}>Total surveys</TableCell>
             <TableCell className="text-right">{surveyCount}</TableCell>
           </TableRow>
         </TableFooter>

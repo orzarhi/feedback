@@ -34,6 +34,7 @@ export default async function Page({ searchParams }: PageProps) {
       title: true,
       surveyType: true,
       description: true,
+      dueDate: true,
       createdAt: true,
       questions: {
         select: {
@@ -53,6 +54,21 @@ export default async function Page({ searchParams }: PageProps) {
 
   if (!survey || !survey.questions) {
     return notFound();
+  }
+
+  if (survey.dueDate < new Date()) {
+    return (
+      <div className="container mx-auto max-w-3xl px-4 py-12 md:px-6 md:py-16 lg:px-8 lg:py-20">
+        <div className="space-y-2 text-center">
+          <h1 className="text-3xl font-bold tracking-tight sm:text-4x">{survey.title}</h1>
+          <p className="text-muted-foreground md:text-xl">{survey.description}</p>
+          <p className="text-muted-foreground text-md">
+            {format(survey.createdAt, 'MMMM dd, yyyy')}
+          </p>
+          <p className="text-red-500">This survey has expired ({format(survey.dueDate,'MMMM dd, yyyy')}).</p>
+        </div>
+      </div>
+    );
   }
 
   return (

@@ -21,7 +21,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 export const CreateSurvey = () => {
   const [surveyType, setSurveyType] = useState<keyof typeof SurveyType>('DEFINES_ALONE');
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -77,17 +76,12 @@ export const CreateSurvey = () => {
   });
 
   const onSubmit = (data: Survey) => {
-    console.log('🚀 ~ onSubmit ~ data:', data);
-    // setIsSubmitted(true);
-
-    // if(!dueDate) return;
-
     const payload = {
       ...data,
       surveyType,
     };
 
-    // create(payload);
+    create(payload);
   };
 
   return (
@@ -107,6 +101,17 @@ export const CreateSurvey = () => {
             {errors.title && (
               <span className="error_message">{errors.title.message}</span>
             )}
+          </div>
+        </div>
+        <div>
+          <Label htmlFor="description">Survey Description (optional)</Label>
+          <div className="mt-1">
+            <Textarea
+              id="description"
+              {...register('description')}
+              rows={3}
+              placeholder="Enter a description for your survey"
+            />
           </div>
         </div>
         <div className="">
@@ -143,11 +148,7 @@ export const CreateSurvey = () => {
         </div>
         <div className="flex flex-col space-y-2">
           <Label htmlFor="dueDate">Due Date</Label>
-          <DatePicker
-            setValue={setValue}
-            watch={watch}
-            errors={errors}
-          />
+          <DatePicker setValue={setValue} watch={watch} errors={errors} />
         </div>
         <div className="mt-6 space-y-1">
           <Label>Survey Type</Label>
@@ -161,17 +162,6 @@ export const CreateSurvey = () => {
           </p>
         </div>
 
-        <div className="mt-6">
-          <Label htmlFor="description">Survey Description (optional)</Label>
-          <div className="mt-1">
-            <Textarea
-              id="description"
-              {...register('description')}
-              rows={3}
-              placeholder="Enter a description for your survey"
-            />
-          </div>
-        </div>
         <div className="flex justify-end">
           <Button
             type="submit"

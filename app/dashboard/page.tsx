@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { db } from '@/db';
-import { formatPrice } from '@/lib/utils';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import { Ghost } from 'lucide-react';
 import Link from 'next/link';
@@ -34,6 +33,7 @@ export default async function Page() {
     select: {
       id: true,
       title: true,
+      dueDate: true,
       description: true,
       createdAt: true,
       response: {
@@ -49,7 +49,6 @@ export default async function Page() {
             include: {
               question: {
                 select: {
-                  
                   id: true,
                   text: true,
                 },
@@ -71,14 +70,15 @@ export default async function Page() {
       },
     },
   });
-  console.log("🚀 ~ Page ~ surveys:", surveys.map((survey) => survey.response));
 
-  const userCount = await db.user.count();
-  const surveyCount = await db.survey.count();
+  const [userCount, surveyCount] = await Promise.all([
+    db.user.count(),
+    db.survey.count(),
+  ]);
 
   if (!surveys || !surveys.length) {
     return (
-      <div className="flex min-h-screen w-full bg-muted/40 mt-4">
+      <div className="flex min-h-screen w-full mt-4">
         <div className="max-w-7xl w-full mx-auto flex flex-col sm:gap-4 sm:py-4">
           <div className="flex flex-col gap-16">
             <div className="flex flex-col items-center justify-center">

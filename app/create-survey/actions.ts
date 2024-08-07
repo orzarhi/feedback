@@ -9,6 +9,7 @@ import { revalidatePath } from 'next/cache';
 export const createSurvey = async (
   data: Survey & {
     surveyType: keyof typeof SurveyType;
+    dueDate: Date;
   }
 ) => {
   const { getUser } = getKindeServerSession();
@@ -34,6 +35,7 @@ export const createSurvey = async (
       data: {
         title: data.title,
         description: data?.description,
+        // dueDate: data.dueDate,
         surveyType: data?.surveyType || 'DEFINES_ALONE',
         userId: user.id,
       },

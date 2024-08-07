@@ -16,9 +16,12 @@ import { createSurvey } from './actions';
 import { QuestionForm } from './QuestionForm';
 import { TypeSelector } from './TypeSelector';
 import { wait } from '@/lib/utils';
+import { DatePicker } from './DatePicker';
 
 export const CreateSurvey = () => {
   const [surveyType, setSurveyType] = useState<keyof typeof SurveyType>('DEFINES_ALONE');
+  const [dueDate, setDueDate] = useState<Date>(undefined);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -71,9 +74,14 @@ export const CreateSurvey = () => {
   });
 
   const onSubmit = (data: Survey) => {
+    setIsSubmitted(true);
+
+    if(!dueDate) return;
+
     const payload = {
       ...data,
       surveyType,
+      dueDate,
     };
 
     create(payload);
@@ -130,7 +138,14 @@ export const CreateSurvey = () => {
             </Button>
           </div>
         </div>
-
+        <div className="flex flex-col space-y-2">
+          <Label htmlFor="dueDate">Due Date</Label>
+          <DatePicker 
+          dueDate={dueDate} 
+          setDueDate={setDueDate}
+          isSubmitted={isSubmitted}
+           />
+        </div>
         <div className="mt-6 space-y-1">
           <Label>Survey Type</Label>
           <TypeSelector surveyType={surveyType} setSurveyType={setSurveyType} />

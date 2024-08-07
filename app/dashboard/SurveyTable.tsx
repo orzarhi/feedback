@@ -24,6 +24,7 @@ type SurveyResponse = {
   id: string;
   feedback: string | null;
   satisfaction: Satisfaction;
+  createdAt: Date;
   user: {
     id: string;
     email: string;
@@ -65,9 +66,10 @@ const LABEL_MAP: Record<Satisfaction, string> = {
 
 interface SurveyTableProps {
   surveys: Surveys;
+  surveyCount: number;
 }
 
-export const SurveyTable = ({ surveys }: SurveyTableProps) => {
+export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
   const [expandedSurveyId, setExpandedSurveyId] = useState<string | null>(null);
 
   const handleToggleExpand = (id: string) => {
@@ -84,7 +86,7 @@ export const SurveyTable = ({ surveys }: SurveyTableProps) => {
               <span className="sr-only">Expand</span>
             </TableHead>
             <TableHead className="hidden sm:table-cell">Title</TableHead>
-            <TableHead>Created At</TableHead>
+            <TableHead className="text-center">Created At</TableHead>
             <TableHead className="text-center">Questions</TableHead>
             <TableHead className="text-center">Action</TableHead>
           </TableRow>
@@ -93,9 +95,11 @@ export const SurveyTable = ({ surveys }: SurveyTableProps) => {
           {surveys.map((survey) => (
             <React.Fragment key={survey.id}>
               <TableRow>
-                <TableCell className={cn('',{
-                    'invisible': !survey.response.length
-                })}>
+                <TableCell
+                  className={cn('', {
+                    invisible: !survey.response.length,
+                  })}
+                >
                   <button
                     onClick={() => handleToggleExpand(survey.id)}
                     className={buttonVariants({ variant: 'link', size: 'icon' })}
@@ -106,7 +110,7 @@ export const SurveyTable = ({ surveys }: SurveyTableProps) => {
                 <TableCell className="font-medium hidden sm:table-cell overflow-hidden truncate w-2">
                   {survey.title}
                 </TableCell>
-                <TableCell>{format(survey.createdAt, 'dd/MM/yyyy')}</TableCell>
+                <TableCell className="text-center">{format(survey.createdAt, 'dd/MM/yyyy HH:mm:ss' )}</TableCell>
                 <TableCell className="text-center">{survey._count.questions}</TableCell>
                 <TableCell className="text-center flex sm:block">
                   <CopyLink
@@ -140,6 +144,7 @@ export const SurveyTable = ({ surveys }: SurveyTableProps) => {
                               <TableHead>User</TableHead>
                               <TableHead>Feedback</TableHead>
                               <TableHead>Satisfaction</TableHead>
+                              <TableHead>Created At</TableHead>
                               <TableHead className="hidden lg:table-cell">
                                 Answers
                               </TableHead>
@@ -153,6 +158,7 @@ export const SurveyTable = ({ surveys }: SurveyTableProps) => {
                                   {response.feedback || 'N/A'}
                                 </TableCell>
                                 <TableCell>{LABEL_MAP[response.satisfaction]}</TableCell>
+                                <TableCell>{format(response.createdAt, 'dd/MM/yyyy HH:mm:ss')}</TableCell>
                                 <TableCell>
                                   {response.answers.map((answer) => (
                                     <div key={answer.id} className="hidden lg:block ">
@@ -178,7 +184,7 @@ export const SurveyTable = ({ surveys }: SurveyTableProps) => {
         <TableFooter>
           <TableRow>
             <TableCell colSpan={4}>Total surveys</TableCell>
-            <TableCell className="text-right">{surveys.length}</TableCell>
+            <TableCell className="text-right">{surveyCount}</TableCell>
           </TableRow>
         </TableFooter>
       </Table>

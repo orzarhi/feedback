@@ -9,7 +9,7 @@ export default function Home() {
       <div className="container px-4 md:px-6 space-y-10 text-center">
         <div className="space-y-6">
           <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
-          Create and Share Your Own Surveys<span className="text-primary"> Easily with Feedback</span>
+          Create and Share Your Own Surveys Easily with feed<span className="text-primary">back</span>
           </h1>
           <p className="max-w-[700px] mx-auto text-lg md:text-xl">
             Empower your voice and connect with others. Create personalized surveys and share them with friends and colleagues to gather valuable feedback.

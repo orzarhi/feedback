@@ -49,6 +49,7 @@ export default async function Page() {
             include: {
               question: {
                 select: {
+                  
                   id: true,
                   text: true,
                 },
@@ -70,6 +71,10 @@ export default async function Page() {
       },
     },
   });
+  console.log("🚀 ~ Page ~ surveys:", surveys.map((survey) => survey.response));
+
+  const userCount = await db.user.count();
+  const surveyCount = await db.survey.count();
 
   if (!surveys || !surveys.length) {
     return (
@@ -96,8 +101,8 @@ export default async function Page() {
       </div>
     );
   }
-  const WEEKLY_GOAL = 500;
-  const MONTHLY_GOAL = 2000;
+  const SURVEY_GOAL = 50;
+  const USERS_GOAL = 100;
 
   return (
     <div className="flex min-h-screen w-full mt-4">
@@ -106,34 +111,30 @@ export default async function Page() {
           <div className="grid gap-4 sm:grid-cols-2">
             <Card>
               <CardHeader className="pb-2">
-                <CardDescription>Last Week</CardDescription>
-                <CardTitle className="text-4xl">{formatPrice(100)}</CardTitle>
+                <CardDescription>Surveys</CardDescription>
+                <CardTitle className="text-4xl">{surveyCount}</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-sm text-muted-foreground">
-                  of {formatPrice(WEEKLY_GOAL)} goal
-                </div>
+                <div className="text-sm text-muted-foreground">of {SURVEY_GOAL} goal</div>
               </CardContent>
               <CardFooter>
-                <Progress value={(50 * 100) / WEEKLY_GOAL} />
+                <Progress value={surveyCount} />
               </CardFooter>
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardDescription>Last Month</CardDescription>
-                <CardTitle className="text-4xl">{formatPrice(30)}</CardTitle>
+                <CardDescription>Users</CardDescription>
+                <CardTitle className="text-4xl">{userCount - 1}</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-sm text-muted-foreground">
-                  of {formatPrice(MONTHLY_GOAL)} goal
-                </div>
+                <div className="text-sm text-muted-foreground">of {USERS_GOAL} goal</div>
               </CardContent>
               <CardFooter>
-                <Progress value={(50 * 100) / MONTHLY_GOAL} />
+                <Progress value={userCount} />
               </CardFooter>
             </Card>
-          </div> 
-          <SurveyTable surveys={surveys} /> 
+          </div>
+          <SurveyTable surveys={surveys} surveyCount={surveyCount} />
         </div>
       </div>
     </div>

@@ -45,6 +45,7 @@ model Survey {
   title       String
   description String?
   surveyType  SurveyType? @default(DEFINES_ALONE)
+  dueDate     DateTime?
 
   questions Question[]
   user      User             @relation(fields: [userId], references: [id])

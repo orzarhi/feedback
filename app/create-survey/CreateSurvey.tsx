@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Survey } from '@/lib/validation';
+import { Survey, surveySchema } from '@/lib/validation';
 import { SurveyType } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -17,10 +17,10 @@ import { QuestionForm } from './QuestionForm';
 import { TypeSelector } from './TypeSelector';
 import { wait } from '@/lib/utils';
 import { DatePicker } from './DatePicker';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 export const CreateSurvey = () => {
   const [surveyType, setSurveyType] = useState<keyof typeof SurveyType>('DEFINES_ALONE');
-  const [dueDate, setDueDate] = useState<Date>(undefined);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   const router = useRouter();
@@ -31,11 +31,13 @@ export const CreateSurvey = () => {
     handleSubmit,
     getValues,
     reset,
+    watch,
     setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
       title: '',
+      dueDate: undefined,
       description: '' as string | undefined,
       questions: [
         {
@@ -48,6 +50,7 @@ export const CreateSurvey = () => {
         },
       ],
     },
+    resolver: zodResolver(surveySchema),
   });
 
   const {
@@ -74,17 +77,17 @@ export const CreateSurvey = () => {
   });
 
   const onSubmit = (data: Survey) => {
-    setIsSubmitted(true);
+    console.log('🚀 ~ onSubmit ~ data:', data);
+    // setIsSubmitted(true);
 
-    if(!dueDate) return;
+    // if(!dueDate) return;
 
     const payload = {
       ...data,
       surveyType,
-      dueDate,
     };
 
-    create(payload);
+    // create(payload);
   };
 
   return (
@@ -140,11 +143,11 @@ export const CreateSurvey = () => {
         </div>
         <div className="flex flex-col space-y-2">
           <Label htmlFor="dueDate">Due Date</Label>
-          <DatePicker 
-          dueDate={dueDate} 
-          setDueDate={setDueDate}
-          isSubmitted={isSubmitted}
-           />
+          <DatePicker
+            setValue={setValue}
+            watch={watch}
+            errors={errors}
+          />
         </div>
         <div className="mt-6 space-y-1">
           <Label>Survey Type</Label>

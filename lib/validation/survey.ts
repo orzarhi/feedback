@@ -1,9 +1,10 @@
 import { QuestionType } from '@prisma/client';
-import { number, z } from 'zod';
+import { z } from 'zod';
 
 export const surveySchema = z.object({
-  title: z.string(),
+  title: z.string().min(3),
   description: z.string().optional(),
+  dueDate: z.date(),
   questions: z.array(
     z.object({
       id: z.number(),
@@ -11,9 +12,9 @@ export const surveySchema = z.object({
         QuestionType.SINGLE_CHOICE,
         QuestionType.SHORT_ANSWER,
         QuestionType.MULTIPLE_CHOICE,
-      ]),
-      text: z.string(),
-      answers: z.array(z.object({ id: number(), text: z.string() })),
+      ]).default(QuestionType.SINGLE_CHOICE),
+      text: z.string().min(3),
+      answers: z.array(z.object({ id: z.number(), text: z.string().min(1) })),
     })
   ),
 });

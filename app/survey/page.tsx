@@ -2,8 +2,8 @@ import { db } from '@/db';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import { format } from 'date-fns';
 import { notFound, redirect } from 'next/navigation';
-import { SurveyForm } from './SurveyForm';
-import { SaveToLocalStorage } from '@/components/SaveToLocalStorage';
+import { SurveyForm } from './survey-form';
+import { SaveToLocalStorage } from '@/components/save-to-local-storage';
 
 interface PageProps {
   searchParams: {

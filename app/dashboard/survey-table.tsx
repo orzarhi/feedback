@@ -15,11 +15,12 @@ import { cn } from '@/lib/utils';
 import { Satisfaction } from '@prisma/client';
 import { format } from 'date-fns';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronDown, ChevronUp, Copy, Eye, Telescope, Trash2 } from 'lucide-react';
+import { ChevronDown, ChevronUp, Copy, Download, Eye, Telescope, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
 import { DropdownOptions } from '@/components/dropdown-options';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { ResponsiveDialog } from '@/components/responsive-dialog';
 
 type SurveyResponse = {
   id: string;
@@ -76,6 +77,8 @@ export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
 
   const [expandedSurveyId, setExpandedSurveyId] = useState<string | null>(null);
   const [_, setCopied] = useState<boolean>(false);
+  const [quickView, setQuickView] = useState<boolean>(false);
+  // const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleToggleExpand = (id: string) => {
     setExpandedSurveyId(expandedSurveyId === id ? null : id);
@@ -198,23 +201,38 @@ export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
                                   </span>
                                 </TableCell>
                                 <TableCell className="text-center">
-                                  {/* {response.answers.map((answer) => (
-                                    <div key={answer.id} className="hidden lg:block">
-                                      <strong className="text-muted-foreground">
-                                        {answer.question.text}:
-                                      </strong>{' '}
-                                      {answer.answer.text}
-                                    </div>
-                                  ))} */}
                                   <DropdownOptions
                                     items={[
                                       {
                                         label: 'Quick View',
                                         icon: <Telescope className="size-4" />,
-                                        onClick: () => {},
+                                        onClick: () => setQuickView(true),
                                       },
+                                      {
+                                        label: 'Download',
+                                        icon: <Download  className="size-4" />,
+                                        onClick: () => {},
+                                      }
                                     ]}
                                   />
+                                  <ResponsiveDialog
+                                    title={`Survey Response`}
+                                    description={`${response.user.email} | ${format(
+                                      response.createdAt,
+                                      'dd/MM/yyyy HH:mm:ss'
+                                    )}`}
+                                    isOpen={quickView}
+                                    setIsOpen={setQuickView}
+                                  >
+                                    {response.answers.map((answer, index) => (
+                                      <div key={answer.id} className="flex flex-col mt-4">
+                                        <span className="text-muted-foreground">
+                                          {index + 1}. {answer.question.text}:
+                                        </span>{' '}
+                                        <strong className=''>{answer.answer.text}</strong>
+                                      </div>
+                                    ))}
+                                  </ResponsiveDialog>
                                 </TableCell>
                               </TableRow>
                             ))}

@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -35,7 +37,7 @@ export const ResponsiveDialog = ({
   if (isDesktop) {
     return (
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[625px]">
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
             {description && <DialogDescription>{description}</DialogDescription>}
@@ -48,12 +50,12 @@ export const ResponsiveDialog = ({
 
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
-      <DrawerContent>
+      <DrawerContent className=''>
         <DrawerHeader className="text-left">
           <DrawerTitle>{title}</DrawerTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
         </DrawerHeader>
-        {children}
+       <div className='p-2'>{children}</div> 
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>

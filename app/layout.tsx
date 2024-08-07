@@ -32,14 +32,7 @@ export default function RootLayout({
               info: 'ℹ️',
             }}
             duration={5000}
-            toastOptions={{
-              classNames: {
-                success: 'bg-green-400/90 text-white',
-                error: 'bg-red-400/90 text-white',
-                warning: 'bg-yellow-400/90 text-white',
-                info: 'bg-blue-400/90 text-white',
-              },
-            }}
+            
           />
         </Providers>
       </body>

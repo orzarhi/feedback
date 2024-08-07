@@ -1,6 +1,5 @@
 'use client';
 
-import { CopyLink } from '@/components/CopyLink';
 import { buttonVariants } from '@/components/ui/button';
 import {
   Table,
@@ -16,9 +15,9 @@ import { cn } from '@/lib/utils';
 import { Satisfaction } from '@prisma/client';
 import { format } from 'date-fns';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronDown, ChevronUp, Eye } from 'lucide-react';
-import Link from 'next/link';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import React, { useState } from 'react';
+import { DropdownOptions } from './DropdownOptions';
 
 type SurveyResponse = {
   id: string;
@@ -114,22 +113,16 @@ export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
                 </TableCell>
                 <TableCell className="text-center">
                   {format(survey.createdAt, 'dd/MM/yyyy')}
-                  <span className="hidden sm:block">{format(survey.createdAt, 'HH:mm:ss')}</span>
+                  <span className="hidden sm:block">
+                    {format(survey.createdAt, 'HH:mm:ss')}
+                  </span>
                 </TableCell>
                 <TableCell className="text-center">
                   {format(survey.dueDate, 'dd/MM/yyyy')}
                 </TableCell>
                 <TableCell className="text-center">{survey._count.questions}</TableCell>
                 <TableCell className="text-center flex sm:block">
-                  <CopyLink
-                    link={`${process.env.NEXT_PUBLIC_BASE_URL}/survey?id=${survey.id}`}
-                  />
-                  <Link
-                    href={`/survey?id=${survey.id}`}
-                    className={buttonVariants({ variant: 'link', size: 'icon' })}
-                  >
-                    <Eye className="size-4" />
-                  </Link>
+                 <DropdownOptions surveyId={survey.id}/>
                 </TableCell>
               </TableRow>
               <AnimatePresence>

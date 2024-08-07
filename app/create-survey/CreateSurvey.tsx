@@ -67,7 +67,7 @@ export const CreateSurvey = () => {
       router.push(`/survey?id=${surveyId}`);
       reset();
       await wait(600);
-      toast.success('Survey created successfully');
+      toast.success('Survey created successfully.');
     },
     onError: (error) => {
       console.error('Error creating survey:', error.message);

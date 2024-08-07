@@ -104,7 +104,7 @@ export const SurveyForm = ({ survey }: SurveyFormProps) => {
     onSuccess: async () => {
       router.push('/');
       await wait(400);
-      toast.success('Thank you, Survey response saved successfully');
+      toast.success('Thank you, Survey response saved successfully.');
     },
     onError: (error) => {
       console.error('Error creating survey:', error.message);

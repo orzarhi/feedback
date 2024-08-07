@@ -105,7 +105,7 @@ export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
             <TableHead className="text-center">Created At</TableHead>
             <TableHead className="text-center">Due Date</TableHead>
             <TableHead className="text-center">Questions</TableHead>
-            <TableHead className="text-center">Action</TableHead>
+            <TableHead className="text-center">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -183,7 +183,7 @@ export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
                               <TableHead>Feedback</TableHead>
                               <TableHead>Satisfaction</TableHead>
                               <TableHead>Created At</TableHead>
-                              <TableHead>Actions</TableHead>
+                              <TableHead className='text-center'>Actions</TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>

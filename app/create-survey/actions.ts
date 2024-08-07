@@ -29,6 +29,10 @@ export const createSurvey = async (
     throw new Error('Survey with this title already exists');
   }
 
+  if(data.dueDate < new Date()) {
+    throw new Error('Due date should be in the future');
+  }
+
   const createSurvey = await db.$transaction(async (prisma) => {
     const createdSurvey = await prisma.survey.create({
       data: {

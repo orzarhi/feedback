@@ -87,7 +87,7 @@ export const QuestionForm = ({
                   disabled
                   className="flex text-center p-2.5 cursor-default text-muted-foreground"
                 >
-                  <Label className="mx-auto text-sm">Question type</Label>
+                  <Label className="mx-auto text-[15px]">Question type</Label>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 {Object.keys(QuestionType).map((type) => (

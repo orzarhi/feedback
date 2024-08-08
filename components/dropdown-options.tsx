@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
-import { MoreHorizontal } from 'lucide-react';
+import { Loader2, MoreHorizontal } from 'lucide-react';
 import { ReactNode } from 'react';
 
 interface DropdownOptionsProps {
@@ -16,15 +16,27 @@ interface DropdownOptionsProps {
     icon: ReactNode;
     onClick: () => void;
   }[];
+  surveyId?: string;
+  isPending?: boolean;
+  deleteSurveyId?: string;
 }
 
-export const DropdownOptions = ({ items }: DropdownOptionsProps) => {
+export const DropdownOptions = ({
+  items,
+  surveyId,
+  isPending,
+  deleteSurveyId,
+}: DropdownOptionsProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="size-8 p-0">
           <span className="sr-only">Open menu</span>
-          <MoreHorizontal className="h-4 w-4" />
+          {deleteSurveyId === surveyId && isPending ? (
+            <Loader2 className=" size-4 animate-spin" />
+          ) : (
+            <MoreHorizontal className="size-4" />
+          )}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px] z-50">

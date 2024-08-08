@@ -29,6 +29,8 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { QuickView } from './quick-view';
+import { useMutation } from '@tanstack/react-query';
+import { deleteSurvey } from './actions';
 
 export type SurveyResponse = {
   id: string;
@@ -86,6 +88,7 @@ export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
   const [expandedSurveyId, setExpandedSurveyId] = useState<string | null>(null);
   const [_, setCopied] = useState<boolean>(false);
   const [quickView, setQuickView] = useState<boolean>(false);
+  const [deleteSurveyId, setDeleteSurveyId] = useState<string>('');
 
   const handleToggleExpand = (id: string) => {
     setExpandedSurveyId(expandedSurveyId === id ? null : id);
@@ -98,6 +101,25 @@ export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
       setTimeout(() => setCopied(false), 2000);
     });
   };
+
+  const { mutate: tt, isPending } = useMutation({
+    mutationKey: ['delete-survey'],
+    mutationFn: deleteSurvey,
+    onSuccess: () => {
+      toast.success('Survey deleted successfully.');
+    },
+    onError: (error) => {
+      console.error(error.message);
+      toast.error('An error occurred while deleting the survey.');
+    },
+    onMutate: (id: string) => {
+      setDeleteSurveyId(id);
+      return id;
+    },
+    onSettled: () => {
+      setDeleteSurveyId('');
+    },
+  });
 
   return (
     <div>
@@ -162,9 +184,12 @@ export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
                       {
                         label: 'Delete',
                         icon: <Trash2 className="size-4" />,
-                        onClick: () => {},
+                        onClick: () => tt(survey.id),
                       },
                     ]}
+                    surveyId={survey.id}
+                    isPending={isPending}
+                    deleteSurveyId={deleteSurveyId}
                   />
                 </TableCell>
               </TableRow>

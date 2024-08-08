@@ -76,14 +76,47 @@ export default async function Page() {
     db.survey.count(),
   ]);
 
+  const SURVEY_GOAL = 50;
+  const USERS_GOAL = 100;
+
   if (!surveys || !surveys.length) {
     return (
       <div className="flex min-h-screen w-full mt-4">
         <div className="max-w-7xl w-full mx-auto flex flex-col sm:gap-4 sm:py-4">
           <div className="flex flex-col gap-16">
+            <div className="grid gap-4 sm:grid-cols-2 m-1">
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardDescription>Surveys</CardDescription>
+                  <CardTitle className="text-4xl">{surveyCount}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-sm text-muted-foreground">
+                    of {SURVEY_GOAL} goal
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <Progress value={surveyCount} />
+                </CardFooter>
+              </Card>
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardDescription>Users</CardDescription>
+                  <CardTitle className="text-4xl">{userCount - 1}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-sm text-muted-foreground">
+                    of {USERS_GOAL} goal
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <Progress value={userCount - 1} />
+                </CardFooter>
+              </Card>
+            </div>
             <div className="flex flex-col items-center justify-center">
               <Ghost className="size-8 text-muted-foreground my-2 animate-bounce" />
-              <p className="text-muted-foreground text-lg">
+              <p className="text-muted-foreground text-lg text-center">
                 You haven&apos;t created any surveys yet.
               </p>
               <Link
@@ -101,12 +134,10 @@ export default async function Page() {
       </div>
     );
   }
-  const SURVEY_GOAL = 50;
-  const USERS_GOAL = 100;
 
   return (
-    <div className="flex min-h-screen w-full mt-4">
-      <div className="max-w-7xl w-full mx-auto flex flex-col sm:gap-4 sm:py-4">
+    <div className="flex min-h-screen w-full mt-4 ">
+      <div className="max-w-7xl w-full mx-auto flex flex-col sm:gap-4 sm:mx-1 sm:py-4">
         <div className="flex flex-col gap-16">
           <div className="grid gap-4 sm:grid-cols-2">
             <Card>

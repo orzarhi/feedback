@@ -18,6 +18,7 @@ import { TypeSelector } from './type-selector';
 import { wait } from '@/lib/utils';
 import { DatePicker } from './date-picker';
 import { zodResolver } from '@hookform/resolvers/zod';
+import confetti from 'canvas-confetti';
 
 export const CreateSurvey = () => {
   const [surveyType, setSurveyType] = useState<keyof typeof SurveyType>('DEFINES_ALONE');
@@ -62,11 +63,16 @@ export const CreateSurvey = () => {
   });
 
   const { mutate: create, isPending } = useMutation({
+    mutationKey: ['create-survey'],
     mutationFn: createSurvey,
-    onSuccess: async ({ surveyId }) => {
-      router.push(`/survey?id=${surveyId}`);
+    onSuccess: () => {
+      router.push(`/dashboard`);
       reset();
-      await wait(600);
+      confetti({
+        particleCount: 300,
+        spread: 120,
+        origin: { y: 0.6, x: 0.5 },
+      });
       toast.success('Survey created successfully.');
     },
     onError: (error) => {
@@ -150,7 +156,7 @@ export const CreateSurvey = () => {
             </Button>
           </div>
         </div>
-    
+
         {/* <div className="mt-6 space-y-1">
           <Label>Survey Type</Label>
           <TypeSelector surveyType={surveyType} setSurveyType={setSurveyType} />

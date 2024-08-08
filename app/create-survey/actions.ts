@@ -70,5 +70,5 @@ export const createSurvey = async (
 
   revalidatePath('/dashboard');
 
-  return { success: true, surveyId: createSurvey.id };
+  return { success: true };
 };

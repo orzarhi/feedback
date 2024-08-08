@@ -35,7 +35,7 @@ export const QuickView = ({ response, quickView, setQuickView }: QuickViewProps)
           </span>
           {answers.map((answer, answerIndex) => (
             <strong key={answerIndex} className="">
-              - {answer}
+               {answer}
             </strong>
           ))}
         </div>

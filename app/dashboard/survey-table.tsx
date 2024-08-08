@@ -1,5 +1,6 @@
 'use client';
 
+import { DropdownOptions } from '@/components/dropdown-options';
 import { buttonVariants } from '@/components/ui/button';
 import {
   Table,
@@ -15,14 +16,21 @@ import { cn } from '@/lib/utils';
 import { Satisfaction } from '@prisma/client';
 import { format } from 'date-fns';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronDown, ChevronUp, Copy, Download, Eye, Telescope, Trash2 } from 'lucide-react';
-import React, { useState } from 'react';
-import { DropdownOptions } from '@/components/dropdown-options';
+import {
+  ChevronDown,
+  ChevronUp,
+  Copy,
+  Download,
+  Eye,
+  Telescope,
+  Trash2,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 import { toast } from 'sonner';
-import { ResponsiveDialog } from '@/components/responsive-dialog';
+import { QuickView } from './quick-view';
 
-type SurveyResponse = {
+export type SurveyResponse = {
   id: string;
   feedback: string | null;
   satisfaction: Satisfaction;
@@ -104,7 +112,6 @@ export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
             <TableHead className="text-center">Created At</TableHead>
             <TableHead className="text-center">Due Date</TableHead>
             <TableHead className="text-center">Questions</TableHead>
-            {/* <TableHead className="text-center">Actions</TableHead> */}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -182,7 +189,6 @@ export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
                               <TableHead>Feedback</TableHead>
                               <TableHead>Satisfaction</TableHead>
                               <TableHead>Created At</TableHead>
-                              {/* <TableHead className='text-center'>Actions</TableHead> */}
                             </TableRow>
                           </TableHeader>
                           <TableBody>
@@ -209,29 +215,16 @@ export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
                                       },
                                       {
                                         label: 'Download',
-                                        icon: <Download  className="size-4" />,
+                                        icon: <Download className="size-4" />,
                                         onClick: () => {},
-                                      }
+                                      },
                                     ]}
                                   />
-                                  <ResponsiveDialog
-                                    title={`Survey Response`}
-                                    description={`${response.user.email} | ${format(
-                                      response.createdAt,
-                                      'dd/MM/yyyy HH:mm:ss'
-                                    )}`}
-                                    isOpen={quickView}
-                                    setIsOpen={setQuickView}
-                                  >
-                                    {response.answers.map((answer, index) => (
-                                      <div key={answer.id} className="flex flex-col mt-4">
-                                        <span className="text-muted-foreground">
-                                          {index + 1}. {answer.question.text}:
-                                        </span>{' '}
-                                        <strong className=''>{answer.answer.text}</strong>
-                                      </div>
-                                    ))}
-                                  </ResponsiveDialog>
+                                  <QuickView
+                                    response={response}
+                                    quickView={quickView}
+                                    setQuickView={setQuickView}
+                                  />
                                 </TableCell>
                               </TableRow>
                             ))}

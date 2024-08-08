@@ -78,7 +78,6 @@ export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
   const [expandedSurveyId, setExpandedSurveyId] = useState<string | null>(null);
   const [_, setCopied] = useState<boolean>(false);
   const [quickView, setQuickView] = useState<boolean>(false);
-  // const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleToggleExpand = (id: string) => {
     setExpandedSurveyId(expandedSurveyId === id ? null : id);
@@ -105,7 +104,7 @@ export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
             <TableHead className="text-center">Created At</TableHead>
             <TableHead className="text-center">Due Date</TableHead>
             <TableHead className="text-center">Questions</TableHead>
-            <TableHead className="text-center">Actions</TableHead>
+            {/* <TableHead className="text-center">Actions</TableHead> */}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -183,7 +182,7 @@ export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
                               <TableHead>Feedback</TableHead>
                               <TableHead>Satisfaction</TableHead>
                               <TableHead>Created At</TableHead>
-                              <TableHead className='text-center'>Actions</TableHead>
+                              {/* <TableHead className='text-center'>Actions</TableHead> */}
                             </TableRow>
                           </TableHeader>
                           <TableBody>

@@ -10,12 +10,23 @@ export const saveSurveyResponse = async (
     surveyId: string;
   }
 ) => {
-  console.log('data!',data)
+  console.log('data!', data);
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
   if (!user?.id || !user?.email) {
-    throw new Error('Invalid user data');
+    throw new Error('Invalid user data.');
+  }
+
+  const userHasSurvey = await db.surveyResponse.findFirst({
+    where: {
+      id: data.surveyId,
+      userId: user.id,
+    },
+  });
+
+  if (userHasSurvey) {
+    throw new Error('User has already completed this survey.');
   }
 
   const answerResponsesData = data.questions.flatMap((question) =>
@@ -39,11 +50,10 @@ export const saveSurveyResponse = async (
   });
 
   if (!surveyResponse) {
-    throw new Error('Failed to save survey response');
+    throw new Error('Failed to save survey response.');
   }
-  
+
   revalidatePath('/dashboard');
-  
+
   return { success: true };
 };
-

@@ -1,5 +1,5 @@
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
-import { CreateSurvey } from './create-survey';
+import { UpsertSurvey } from './upsert-survey';
 import { notFound } from 'next/navigation';
 
 export default async function Page() {
@@ -16,5 +16,5 @@ export default async function Page() {
     return notFound();
   }
 
-  return <CreateSurvey />;
+  return <UpsertSurvey  />;
 }

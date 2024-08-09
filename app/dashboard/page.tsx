@@ -14,6 +14,7 @@ import { Ghost } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { SurveyTable } from './survey-table';
+import { CardDetails } from './card-details';
 
 export default async function Page() {
   const { getUser } = getKindeServerSession();
@@ -76,43 +77,13 @@ export default async function Page() {
     db.survey.count(),
   ]);
 
-  const SURVEY_GOAL = 50;
-  const USERS_GOAL = 100;
-
   if (!surveys || !surveys.length) {
     return (
       <div className="flex min-h-screen w-full mt-4">
         <div className="max-w-7xl w-full mx-auto flex flex-col sm:gap-4 sm:py-4">
           <div className="flex flex-col gap-16">
             <div className="grid gap-4 sm:grid-cols-2 m-1">
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardDescription>Surveys</CardDescription>
-                  <CardTitle className="text-4xl">{surveyCount}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-sm text-muted-foreground">
-                    of {SURVEY_GOAL} goal
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Progress value={surveyCount} />
-                </CardFooter>
-              </Card>
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardDescription>Users</CardDescription>
-                  <CardTitle className="text-4xl">{userCount - 1}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-sm text-muted-foreground">
-                    of {USERS_GOAL} goal
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Progress value={userCount - 1} />
-                </CardFooter>
-              </Card>
+              <CardDetails surveyCount={surveyCount} userCount={userCount} />
             </div>
             <div className="flex flex-col items-center justify-center">
               <Ghost className="size-8 text-muted-foreground my-2 animate-bounce" />
@@ -140,30 +111,7 @@ export default async function Page() {
       <div className="max-w-7xl w-full mx-auto flex flex-col sm:gap-4 sm:mx-1 sm:py-4">
         <div className="flex flex-col gap-16">
           <div className="grid gap-4 sm:grid-cols-2">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardDescription>Surveys</CardDescription>
-                <CardTitle className="text-4xl">{surveyCount}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-sm text-muted-foreground">of {SURVEY_GOAL} goal</div>
-              </CardContent>
-              <CardFooter>
-                <Progress value={surveyCount} />
-              </CardFooter>
-            </Card>
-            <Card>
-              <CardHeader className="pb-2">
-                <CardDescription>Users</CardDescription>
-                <CardTitle className="text-4xl">{userCount - 1}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-sm text-muted-foreground">of {USERS_GOAL} goal</div>
-              </CardContent>
-              <CardFooter>
-                <Progress value={userCount} />
-              </CardFooter>
-            </Card>
+            <CardDetails surveyCount={surveyCount} userCount={userCount} />
           </div>
           <SurveyTable surveys={surveys} surveyCount={surveyCount} />
         </div>

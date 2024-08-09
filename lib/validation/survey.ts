@@ -7,14 +7,14 @@ export const surveySchema = z.object({
   dueDate: z.date(),
   questions: z.array(
     z.object({
-      id: z.number(),
+      id: z.string(),
       questionType: z.enum([
         QuestionType.SINGLE_CHOICE,
         QuestionType.SHORT_ANSWER,
         QuestionType.MULTIPLE_CHOICE,
       ]).default(QuestionType.SINGLE_CHOICE),
       text: z.string().min(3),
-      answers: z.array(z.object({ id: z.number(), text: z.string().min(1) })),
+      answers: z.array(z.object({ id: z.string(), text: z.string().min(1) })),
     })
   ),
 });

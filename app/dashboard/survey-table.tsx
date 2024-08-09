@@ -22,6 +22,7 @@ import {
   Copy,
   Download,
   Eye,
+  Pen,
   Telescope,
   Trash2,
 } from 'lucide-react';
@@ -180,6 +181,11 @@ export const SurveyTable = ({ surveys, surveyCount }: SurveyTableProps) => {
                         label: 'Show',
                         icon: <Eye className="size-4" />,
                         onClick: () => router.push(`/survey?id=${survey.id}`),
+                      },
+                      {
+                        label: 'Edit',
+                        icon: <Pen className="size-4" />,
+                        onClick: () => router.push(`/edit-survey?id=${survey.id}`),
                       },
                       {
                         label: 'Delete',

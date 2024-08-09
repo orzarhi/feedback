@@ -21,9 +21,9 @@ import {
   useWatch,
 } from 'react-hook-form';
 
-type survey = keyof typeof QuestionType;
+type SurveyKeyType = keyof typeof QuestionType;
 
-const LABEL_MAP: Record<survey, string> = {
+const LABEL_MAP: Record<SurveyKeyType, string> = {
   SINGLE_CHOICE: 'Single Choice',
   MULTIPLE_CHOICE: 'Multiple Choice',
   SHORT_ANSWER: 'Short Answer',
@@ -69,7 +69,7 @@ export const QuestionForm = ({
             <Label htmlFor={`question-${questionIndex}`}>
               Question {questionIndex + 1}{' '}
               <span className="text-muted-foreground">
-                (Type: {LABEL_MAP[watchedQuestionType as survey]})
+                (Type: {LABEL_MAP[watchedQuestionType as SurveyKeyType]})
               </span>
             </Label>
             <DropdownMenu>
@@ -100,7 +100,10 @@ export const QuestionForm = ({
                       }
                     )}
                     onClick={() =>
-                      setValue(`questions.${questionIndex}.questionType`, type as survey)
+                      setValue(
+                        `questions.${questionIndex}.questionType`,
+                        type as SurveyKeyType
+                      )
                     }
                   >
                     <Check
@@ -109,7 +112,7 @@ export const QuestionForm = ({
                         watchedQuestionType === type ? 'opacity-100' : 'opacity-0'
                       )}
                     />
-                    {LABEL_MAP[type as survey]}
+                    {LABEL_MAP[type as SurveyKeyType]}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
@@ -183,7 +186,7 @@ export const QuestionForm = ({
         <Button
           type="button"
           variant="ghost"
-          onClick={() => appendAnswer({ id: answers.length, text: '' })}
+          onClick={() => appendAnswer({ id: answers.length.toString(), text: '' })}
         >
           Add Answer
         </Button>

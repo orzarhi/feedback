@@ -1,4 +1,3 @@
-//@ts-nocheck
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -6,21 +5,26 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Survey, surveySchema } from '@/lib/validation';
-import { SurveyType } from '@prisma/client';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { type SurveyType } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
+import confetti from 'canvas-confetti';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { type SurveyTypeEdit } from '../edit-survey/page';
 import { createSurvey } from './actions';
-import { QuestionForm } from './question-form';
-import { TypeSelector } from './type-selector';
-import { wait } from '@/lib/utils';
 import { DatePicker } from './date-picker';
-import { zodResolver } from '@hookform/resolvers/zod';
-import confetti from 'canvas-confetti';
+import { QuestionForm } from './question-form';
+import { updateSurvey } from '../edit-survey/actions';
 
-export const CreateSurvey = () => {
+interface UpsertSurveyProps {
+  survey?: SurveyTypeEdit;
+  isEdit?: boolean;
+}
+
+export const UpsertSurvey = ({ survey, isEdit }: UpsertSurveyProps) => {
   const [surveyType, setSurveyType] = useState<keyof typeof SurveyType>('DEFINES_ALONE');
 
   const router = useRouter();
@@ -29,26 +33,37 @@ export const CreateSurvey = () => {
     register,
     control,
     handleSubmit,
-    getValues,
     reset,
     watch,
     setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      title: '',
-      dueDate: undefined,
-      description: '' as string | undefined,
-      questions: [
-        {
-          id: 0,
-          text: '',
-          answers: [
-            { id: 0, text: '' },
-            { id: 1, text: '' },
-          ],
-        },
-      ],
+      title: isEdit ? survey?.title : '',
+      dueDate: isEdit ? survey?.dueDate : null,
+      description: isEdit ? survey?.description : ('' as string | undefined),
+      questions:
+        isEdit && survey?.questions
+          ? survey.questions.map((question) => ({
+              id: question.id,
+              text: question.text,
+              questionType: question.questionType,
+              answers: question.answers.map((answer) => ({
+                id: answer.id,
+                text: answer.text,
+              })),
+            }))
+          : [
+              {
+                id: 0,
+                text: '',
+                questionType: 'SINGLE_CHOICE',
+                answers: [
+                  { id: 0, text: '' },
+                  { id: 1, text: '' },
+                ],
+              },
+            ],
     },
     resolver: zodResolver(surveySchema),
   });
@@ -62,7 +77,20 @@ export const CreateSurvey = () => {
     name: 'questions',
   });
 
-  const { mutate: create, isPending } = useMutation({
+  const { mutate: update, isPending: isPendingUpdate } = useMutation({
+    mutationKey: ['update-survey'],
+    mutationFn: updateSurvey,
+    onSuccess: () => {
+      router.push(`/dashboard`);
+      toast.success('Survey updated successfully.');
+    },
+    onError: (error) => {
+      console.error('Error updating survey:', error.message);
+      toast.error(error.message ?? 'Something went wrong. Please try again later.');
+    },
+  });
+
+  const { mutate: create, isPending: isPendingCreate } = useMutation({
     mutationKey: ['create-survey'],
     mutationFn: createSurvey,
     onSuccess: () => {
@@ -77,15 +105,22 @@ export const CreateSurvey = () => {
     },
     onError: (error) => {
       console.error('Error creating survey:', error.message);
-      toast.error('Something went wrong. Please try again later.');
+      toast.error(error.message ?? 'Something went wrong. Please try again later.');
     },
   });
 
+  const isPending = isEdit ? isPendingUpdate : isPendingCreate;
+  console.log(errors);
   const onSubmit = (data: Survey) => {
     const payload = {
       ...data,
       surveyType,
     };
+
+    if (isEdit) {
+      update({ ...payload, surveyId: survey?.id });
+      return;
+    }
 
     create(payload);
   };
@@ -145,6 +180,7 @@ export const CreateSurvey = () => {
                 appendQuestion({
                   id: questions.length,
                   text: '',
+                  questionType: 'SINGLE_CHOICE',
                   answers: [
                     { id: 0, text: '' },
                     { id: 1, text: '' },
@@ -156,27 +192,14 @@ export const CreateSurvey = () => {
             </Button>
           </div>
         </div>
-
-        {/* <div className="mt-6 space-y-1">
-          <Label>Survey Type</Label>
-          <TypeSelector surveyType={surveyType} setSurveyType={setSurveyType} />
-          <p className="text-xs text-muted-foreground">
-            You can change the type for all the questions together here.
-          </p>
-          <p className="text-xs font-semibold text-muted-foreground">
-            {' '}
-            If you choose different types, don&apos;t refer to me.
-          </p>
-        </div> */}
-
         <div className="flex justify-end">
           <Button
             type="submit"
             disabled={isPending}
             isLoading={isPending}
-            loadingText="Submitting"
+            loadingText={isEdit ? 'Updating' : 'Creating'}
           >
-            Submit Survey
+            {isEdit ? 'Update Survey' : 'Create Survey'}
           </Button>
         </div>
       </div>

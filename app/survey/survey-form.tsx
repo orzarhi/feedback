@@ -108,7 +108,7 @@ export const SurveyForm = ({ survey }: SurveyFormProps) => {
     },
     onError: (error) => {
       console.error('Error creating survey:', error.message);
-      toast.error('Something went wrong. Please try again later.');
+      toast.error(error.message ?? 'Something went wrong. Please try again later.');
     },
   });
 
@@ -140,6 +140,7 @@ export const SurveyForm = ({ survey }: SurveyFormProps) => {
                 <Controller
                   name={`question-${question.id}`}
                   control={control}
+                  defaultValue={''}
                   // rules={{ required: 'Answer is required' }}
                   render={({ field }) => (
                     <RadioGroup onValueChange={field.onChange} value={field.value}>

@@ -10,7 +10,6 @@ export const saveSurveyResponse = async (
     surveyId: string;
   }
 ) => {
-  console.log('data!', data);
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
@@ -20,7 +19,7 @@ export const saveSurveyResponse = async (
 
   const userHasSurvey = await db.surveyResponse.findFirst({
     where: {
-      id: data.surveyId,
+      surveyId: data.surveyId,
       userId: user.id,
     },
   });
